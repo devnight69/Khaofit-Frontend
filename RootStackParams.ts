@@ -3,4 +3,5 @@ export type RootStackParamList = {
   signupPage: any;
   otpPage: any;
   homepage: any;
+  MenuPage: any;
 };

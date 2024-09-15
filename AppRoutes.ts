@@ -1,5 +1,6 @@
 import Homepage from './src/pages/Homepage/Homepage';
 import LoginPage from './src/pages/Login/Login';
+import MenuPage from './src/pages/MenuPage/MenuPage';
 import OtpVerification from './src/pages/OTP/OTP';
 import SignupPage from './src/pages/Signup/Signup';
 
@@ -45,5 +46,10 @@ export const AppRoutes = [
       },
       headerTitleAlign: 'center',
     },
+  },
+  {
+    name: 'MenuPage',
+    component: MenuPage,
+    options: {headerShown: false},
   },
 ];
