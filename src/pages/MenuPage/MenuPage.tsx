@@ -6,17 +6,17 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import LeftArrow from '../../assets/leftarrow.svg'; // Example SVG import
+import LeftArrow from '../../assets/leftarrow.svg';
 import Button from '../../components/Button/Button';
 import FoodIcon from '../../assets/food.svg';
+import ViewItemDetails from './ViewItemDetails';
+import AddItemInCartModal from './AddItemInCartModal';
 
 // Sample MealCard Component
-const MealCard = ({meal}: any) => {
+const MealCard = ({meal, setShowModal, setShowAddItemModal}: any) => {
   return (
     <View style={styles.cardContainer}>
-      {/* Card Content */}
       <View style={styles.cardContent}>
-        {/* Left Section: Meal Info */}
         <View style={styles.leftSection}>
           <View
             style={{
@@ -41,18 +41,19 @@ const MealCard = ({meal}: any) => {
           <Text style={styles.mealPrice}>₹{meal.price}</Text>
         </View>
 
-        {/* Right Section: Add Button */}
         <View
           style={{
             display: 'flex',
             flexDirection: 'column',
             position: 'relative',
           }}>
-          <FoodIcon />
+          <TouchableOpacity onPress={() => setShowModal(true)}>
+            <FoodIcon />
+          </TouchableOpacity>
           <View style={{position: 'absolute', bottom: -26, left: 14}}>
             <Button
               title="+ ADD"
-              onPress={() => {}}
+              onPress={() => setShowAddItemModal(true)}
               width={'auto'}
               height={36}
               borderRadius={10}
@@ -61,7 +62,6 @@ const MealCard = ({meal}: any) => {
         </View>
       </View>
 
-      {/* Customizable Text */}
       <Text style={styles.customizableText}>customizable</Text>
     </View>
   );
@@ -110,6 +110,9 @@ function MenuPage() {
     },
   ];
 
+  const [showModal, setShowModal] = useState(false);
+  const [showAddItemModal, setShowAddItemModal] = useState(false);
+
   return (
     <View
       style={{
@@ -147,12 +150,21 @@ function MenuPage() {
         </ScrollView>
       </View>
 
-      {/* Scrollable Meal Cards */}
       <ScrollView style={styles.mealsContainer}>
         {meals.map((meal, index) => (
-          <MealCard key={index} meal={meal} />
+          <MealCard
+            key={index}
+            meal={meal}
+            setShowModal={setShowModal}
+            setShowAddItemModal={setShowAddItemModal}
+          />
         ))}
       </ScrollView>
+      <ViewItemDetails showModal={showModal} setShowModal={setShowModal} />
+      <AddItemInCartModal
+        visible={showAddItemModal}
+        onClose={() => setShowAddItemModal(false)}
+      />
     </View>
   );
 }
