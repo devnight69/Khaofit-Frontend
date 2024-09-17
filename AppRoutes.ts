@@ -1,3 +1,4 @@
+import Cart from './src/pages/Cart/Cart';
 import Homepage from './src/pages/Homepage/Homepage';
 import LoginPage from './src/pages/Login/Login';
 import MenuPage from './src/pages/MenuPage/MenuPage';
@@ -51,5 +52,21 @@ export const AppRoutes = [
     name: 'MenuPage',
     component: MenuPage,
     options: {headerShown: false},
+  },
+  {
+    name: 'Cart',
+    component: Cart,
+    options: {
+      title: 'My Cart',
+      headerStyle: {
+        backgroundColor: '#FFF',
+      },
+      headerTitleStyle: {
+        fontSize: 16,
+        fontWeight: '100',
+        color: 'black',
+      },
+      headerTitleAlign: 'center',
+    },
   },
 ];

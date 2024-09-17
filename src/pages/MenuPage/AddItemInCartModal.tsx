@@ -9,6 +9,9 @@ import {
 import CheckBox from '@react-native-community/checkbox';
 import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 import ReactNativeModal from 'react-native-modal';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../../RootStackParams';
+import {useNavigation} from '@react-navigation/native';
 
 const AddItemInCartModal = ({visible, onClose}: any) => {
   const [mealAddon, setMealAddon] = useState({
@@ -16,6 +19,9 @@ const AddItemInCartModal = ({visible, onClose}: any) => {
     onionSalad: false,
     fryums: false,
   });
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [rotiAddon, setRotiAddon] = useState(false);
   const [dalChoice, setDalChoice] = useState('');
@@ -48,15 +54,17 @@ const AddItemInCartModal = ({visible, onClose}: any) => {
       onBackdropPress={onClose}
       onBackButtonPress={onClose}>
       <View style={styles.modalContainer}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Kadai Paneer Meal Dabba</Text>
-          <TouchableOpacity onPress={onClose}>
-            <Text style={styles.closeButton}>✕</Text>
-          </TouchableOpacity>
+        <View style={{paddingHorizontal: 20, paddingTop: 20}}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Kadai Paneer Meal Dabba</Text>
+            <TouchableOpacity onPress={onClose}>
+              <Text style={styles.closeButton}>✕</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.subTitle}>
+            Kadai Paneer [150ml] + Phulka [3] of your choice
+          </Text>
         </View>
-        <Text style={styles.subTitle}>
-          Kadai Paneer [150ml] + Phulka [3] of your choice
-        </Text>
         <ScrollView style={styles.content}>
           {/* Meal Addon Section */}
           <Text style={styles.sectionTitle}>Meal Addon</Text>
@@ -183,15 +191,49 @@ const AddItemInCartModal = ({visible, onClose}: any) => {
             />
           </View>
         </ScrollView>
-        <Text style={styles.footerText}>
-          Select any 1 option from "Dal Choice (choose any 1)"
-        </Text>
+        <TouchableOpacity
+          style={styles.footerContainer}
+          onPress={() => navigation.navigate('Cart')}>
+          <View style={styles.footerLeft}>
+            <Text style={styles.footerItemCount}>1 Item</Text>
+            <Text style={styles.footerPrice}>₹209</Text>
+          </View>
+          <Text style={styles.footerButton}>VIEW CART →</Text>
+        </TouchableOpacity>
       </View>
     </ReactNativeModal>
   );
 };
 
 const styles = StyleSheet.create({
+  footerContainer: {
+    flexDirection: 'row', // Align items horizontally
+    justifyContent: 'space-between', // Space between the price and button
+    alignItems: 'center', // Align items vertically in the center
+    backgroundColor: '#E65100', // Footer background color
+    paddingVertical: 16, // Vertical padding for footer
+    paddingHorizontal: 20, // Horizontal padding for footer
+    width: '100%',
+  },
+  footerLeft: {
+    flexDirection: 'row', // Align item count and price horizontally
+    alignItems: 'center',
+  },
+  footerItemCount: {
+    fontSize: 16,
+    color: '#FFF',
+    marginRight: 10, // Space between item count and price
+  },
+  footerPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  footerButton: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -208,9 +250,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    height: '68%',
+    height: '70%',
     alignItems: 'flex-start',
-    padding: 20,
+    // padding: 20,
   },
   header: {
     flexDirection: 'row',
@@ -234,6 +276,7 @@ const styles = StyleSheet.create({
   },
   content: {
     maxHeight: 500,
+    paddingHorizontal: 20,
   },
   mealPrice: {
     fontSize: 18,
@@ -252,13 +295,16 @@ const styles = StyleSheet.create({
   },
   footerText: {
     textAlign: 'center',
-    color: 'red',
+    color: '#FFF',
     // marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     fontWeight: '500',
-    fontSize: 14,
+    fontSize: 18,
+    backgroundColor: '#E65100',
+    // height: 50,
+    paddingVertical: 16,
   },
 });
 
