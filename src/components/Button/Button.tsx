@@ -6,7 +6,7 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
-import {globalBGColor} from '../../gloabalStyles/globalStyles';
+import {colors} from '../../gloabalStyles/globalStyles';
 
 interface ButtonProps {
   title: string;
@@ -22,7 +22,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
-  bgColor = globalBGColor, // Default background color (orange)
+  bgColor = colors.secondary, // Default background color (orange)
   textColor = '#FFFFFF', // Default text color (white)
   height = 50, // Default height
   width = 200, // Default width

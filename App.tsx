@@ -6,8 +6,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {AppRoutes} from './AppRoutes';
 import 'react-native-devsettings/withAsyncStorage';
-import {globalBGColor} from './src/gloabalStyles/globalStyles';
-
+import {colors} from './src/gloabalStyles/globalStyles';
 const Stack = createNativeStackNavigator();
 const navigation: any = React.createRef();
 
@@ -16,7 +15,10 @@ const App = () => {
     <>
       <NavigationContainer ref={navigation}>
         <View style={{flex: 1}}>
-          <StatusBar backgroundColor={globalBGColor} barStyle="light-content" />
+          <StatusBar
+            backgroundColor={colors.secondary}
+            barStyle="light-content"
+          />
           <Stack.Navigator>
             {AppRoutes.map((component: any, index: any) => (
               <Stack.Screen

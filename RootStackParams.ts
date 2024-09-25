@@ -5,4 +5,9 @@ export type RootStackParamList = {
   homepage: any;
   MenuPage: any;
   Cart: any;
+  KnowAboutBMI: any;
+  BMIInputPage: any;
+  BMIResultPage: any;
+  HealthGoals: any;
+  BMICaloriesPage: any;
 };

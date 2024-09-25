@@ -14,6 +14,7 @@ import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../RootStackParams';
+import {colors} from '../../gloabalStyles/globalStyles';
 
 function SignupPage() {
   const [fullName, setFullName] = useState('');
@@ -143,8 +144,8 @@ function SignupPage() {
               value={termsAccepted}
               onValueChange={setTermsAccepted}
               tintColors={{
-                true: 'orange',
-                false: 'orange',
+                true: colors.secondary,
+                false: colors.secondary,
               }}
             />
             <Text style={styles.text}>
@@ -157,7 +158,7 @@ function SignupPage() {
           <Button
             title="Register"
             width={'100%'}
-            onPress={() => navigation.navigate('homepage')}
+            onPress={() => navigation.navigate('KnowAboutBMI')}
           />
 
           {/* Sign In Option */}
@@ -169,7 +170,7 @@ function SignupPage() {
             <TouchableOpacity onPress={() => navigation.navigate('loginPage')}>
               <Typography
                 children="Sign In"
-                color="#FFA500"
+                color={colors.secondary}
                 style={{fontWeight: '500'}}
               />
             </TouchableOpacity>
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   link: {
-    color: 'orange',
+    color: colors.secondary,
     fontWeight: 'bold',
   },
   chipWrapper: {
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   selectedChip: {
-    backgroundColor: '#FFA500',
+    backgroundColor: colors.secondary,
   },
   chipText: {
     fontSize: 16,

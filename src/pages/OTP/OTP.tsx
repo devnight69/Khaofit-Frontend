@@ -10,6 +10,7 @@ import Button from '../../components/Button/Button';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../RootStackParams';
+import {colors} from '../../gloabalStyles/globalStyles';
 
 const OtpVerification = () => {
   const [otp, setOtp] = useState(['', '', '', '']); // For storing the OTP digits
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   resendLink: {
-    color: '#FF8000',
+    color: colors.secondary,
     fontSize: 14,
     marginLeft: 5,
   },
