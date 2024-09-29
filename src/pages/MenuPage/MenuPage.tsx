@@ -1,276 +1,201 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  ScrollView,
-  StyleSheet,
-  Text,
   View,
+  Text,
+  FlatList,
+  Image,
+  StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import LeftArrow from '../../assets/leftarrow.svg';
-import Button from '../../components/Button/Button';
-import FoodIcon from '../../assets/food.svg';
-import ViewItemDetails from './ViewItemDetails';
-import AddItemInCartModal from './AddItemInCartModal';
 
-// Sample MealCard Component
-const MealCard = ({meal, setShowModal, setShowAddItemModal}: any) => {
-  return (
+const shakeData = [
+  {
+    id: '1',
+    title: 'Oat Milkshake',
+    rating: '4.3',
+    time: '36-40mins',
+    image: require('../../assets/oat_milkshake.png'),
+    description:
+      'A creamy, oat-based milkshake packed with protein. Your star meal provides the energy needed.',
+  },
+  {
+    id: '2',
+    title: 'Mixed Fruit Shake',
+    rating: '4.5',
+    time: '35-40mins',
+    image: require('../../assets/oat_milkshake.png'),
+    description:
+      'A refreshing blend of fruits to revitalize your senses and recharge your body.',
+  },
+  {
+    id: '3',
+    title: 'Orange Juice',
+    rating: '4.6',
+    time: '38-40mins',
+    image: require('../../assets/oat_milkshake.png'),
+    description:
+      'Fresh and vitamin-packed orange juice for a healthy start to your day.',
+  },
+  {
+    id: '4',
+    title: 'Pineapple Juice',
+    rating: '4.2',
+    time: '36-40mins',
+    image: require('../../assets/oat_milkshake.png'),
+    description: 'A tropical, sweet juice for a refreshing experience anytime.',
+  },
+  {
+    id: '5',
+    title: 'Mosambi Juice',
+    rating: '4.7',
+    time: '36-40mins',
+    image: require('../../assets/oat_milkshake.png'),
+    description:
+      'Citrusy and light, a perfect blend of vitamin C and hydration.',
+  },
+  {
+    id: '6',
+    title: 'Chia Seed in Lemon Water',
+    rating: '4.7',
+    time: '36-40mins',
+    image: require('../../assets/oat_milkshake.png'),
+    description:
+      'A refreshing drink with chia seeds and lemon, keeping you hydrated and energized.',
+  },
+];
+
+const MenuPage = () => {
+  const renderItem = ({item}: any) => (
     <View style={styles.cardContainer}>
-      <View style={styles.cardContent}>
-        <View style={styles.leftSection}>
-          <View
-            style={{
-              height: 16,
-              width: 16,
-              borderWidth: 2,
-              borderColor: 'green',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                borderRadius: 50,
-                backgroundColor: 'green',
-                width: 8,
-                height: 8,
-              }}></View>
-          </View>
-          <Text style={styles.mealName}>{meal.name}</Text>
-          <Text style={styles.mealDescription}>{meal.description}</Text>
-          <Text style={styles.mealPrice}>₹{meal.price}</Text>
-        </View>
-
+      <Image source={item.image} style={styles.cardImage} />
+      <View style={styles.cardDetails}>
+        <Text style={styles.cardTitle}>{item.title}</Text>
+        <Text style={styles.cardRating}>
+          <Image
+            source={require('../../assets/star.png')}
+            resizeMode="contain"
+            style={{width: 16, height: 16}}
+          />{' '}
+          {item.rating} (4.0k+) · {item.time}
+        </Text>
+        <Text style={styles.cardDescription}>{item.description}</Text>
         <View
           style={{
+            width: '100%',
+            justifyContent: 'flex-end',
             display: 'flex',
-            flexDirection: 'column',
-            position: 'relative',
+            alignItems: 'flex-end',
           }}>
-          <TouchableOpacity onPress={() => setShowModal(true)}>
-            <FoodIcon />
+          <TouchableOpacity style={styles.addButton}>
+            <Text style={styles.addButtonText}>ADD</Text>
           </TouchableOpacity>
-          <View style={{position: 'absolute', bottom: -26, left: 14}}>
-            <Button
-              title="+ ADD"
-              onPress={() => setShowAddItemModal(true)}
-              width={'auto'}
-              height={36}
-              borderRadius={10}
-            />
-          </View>
         </View>
       </View>
+    </View>
+  );
 
-      <Text style={styles.customizableText}>customizable</Text>
+  return (
+    <View style={styles.container}>
+      {/* Top Section */}
+      {/* <View style={styles.topSection}> */}
+      <Image
+        source={require('../../assets/shakes_top_image.png')}
+        resizeMode="contain"
+        style={{width: '100%', height: 206}}
+      />
+      {/* </View> */}
+      <Text style={styles.sectionTitle}>SHAKES</Text>
+      <Text style={styles.sectionSubtitle}>
+        Fuel your fitness cravings with these refreshing juices and delicious
+        healthy shakes.
+      </Text>
+
+      {/* List Section */}
+      <FlatList
+        data={shakeData}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+      />
     </View>
   );
 };
 
-function MenuPage() {
-  const [selectedMenu, setSelectedMenu] = useState('MEALS');
-
-  const menuItems = ['MEALS', 'MEAL DABBA', 'SABJI', 'ROTI', 'PARATHA'];
-
-  const meals = [
-    {
-      name: 'Kadai Paneer Meal Dabba',
-      description: 'Kadai Paneer [150ml] + Phulka [3] + Dal [300ml] + ... More',
-      price: 209,
-    },
-    {
-      name: 'Paneer Makhni Meal Dabba',
-      description:
-        'Paneer Makhni [150ml] + Phulka [3] + Dal [300ml] + ... More',
-      price: 199,
-    },
-    {
-      name: 'Paneer Makhni Meal Dabba',
-      description:
-        'Paneer Makhni [150ml] + Phulka [3] + Dal [300ml] + ... More',
-      price: 199,
-    },
-    {
-      name: 'Paneer Makhni Meal Dabba',
-      description:
-        'Paneer Makhni [150ml] + Phulka [3] + Dal [300ml] + ... More',
-      price: 199,
-    },
-    {
-      name: 'Paneer Makhni Meal Dabba',
-      description:
-        'Paneer Makhni [150ml] + Phulka [3] + Dal [300ml] + ... More',
-      price: 199,
-    },
-    {
-      name: 'Paneer Makhni Meal Dabba',
-      description:
-        'Paneer Makhni [150ml] + Phulka [3] + Dal [300ml] + ... More',
-      price: 199,
-    },
-  ];
-
-  const [showModal, setShowModal] = useState(false);
-  const [showAddItemModal, setShowAddItemModal] = useState(false);
-
-  return (
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-      }}>
-      <View style={styles.topBar}>
-        <LeftArrow width={24} height={24} />
-        <View style={styles.locationInfo}>
-          <Text style={styles.deliveryText}>DELIVER AT</Text>
-          <Text style={styles.locationText}>Airoli, Navi Mumbai, India</Text>
-          <Text style={styles.etaText}>ETA: Today 1:30 pm to 2:00 pm</Text>
-        </View>
-        <Text style={styles.searchIcon}>🔍</Text>
-      </View>
-
-      <View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.menuSlider}
-          contentContainerStyle={styles.menuItemsContainer}>
-          {menuItems.map((item, index) => (
-            <TouchableOpacity key={index} onPress={() => setSelectedMenu(item)}>
-              <Text
-                style={[
-                  styles.menuItem,
-                  selectedMenu === item ? styles.selectedMenuItem : null,
-                ]}>
-                {item}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-
-      <ScrollView style={styles.mealsContainer}>
-        {meals.map((meal, index) => (
-          <MealCard
-            key={index}
-            meal={meal}
-            setShowModal={setShowModal}
-            setShowAddItemModal={setShowAddItemModal}
-          />
-        ))}
-      </ScrollView>
-      <ViewItemDetails showModal={showModal} setShowModal={setShowModal} />
-      <AddItemInCartModal
-        visible={showAddItemModal}
-        onClose={() => setShowAddItemModal(false)}
-      />
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  topBar: {
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    paddingTop: 10,
+    paddingHorizontal: 16,
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'left',
+    paddingHorizontal: 16,
+  },
+  listContent: {
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
+  cardContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#64B5F6',
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    marginVertical: 10,
     padding: 10,
     alignItems: 'center',
   },
-  locationInfo: {
+  cardImage: {
+    width: 140,
+    height: 140,
+    borderRadius: 8,
+  },
+  cardDetails: {
     flex: 1,
     marginLeft: 10,
   },
-  deliveryText: {
-    color: '#fff',
-    fontSize: 10,
-  },
-  locationText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  etaText: {
-    color: '#fff',
-    fontSize: 12,
-  },
-  searchIcon: {
-    color: '#fff',
-    fontSize: 18,
-    padding: 5,
-  },
-  menuSlider: {
-    backgroundColor: '#FFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-    height: 'auto',
-  },
-  menuItemsContainer: {
-    flexDirection: 'row',
-    paddingTop: 10,
-    height: 'auto',
-  },
-  menuItem: {
-    marginHorizontal: 15,
-    fontSize: 16,
-    fontWeight: 'normal',
-    color: '#000',
-    paddingBottom: 10, // Add some space for the underline
-    borderBottomWidth: 2, // Width of the underline
-    borderBottomColor: 'transparent', // Default underline color (hidden)
-  },
-  selectedMenuItem: {
-    fontWeight: 'bold',
-    borderBottomColor: '#64B5F6', // Color of the underline
-  },
-  mealsContainer: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#f5f5f5',
-  },
-  // Styles for Meal Card
-  cardContainer: {
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderRadius: 10,
-    padding: 10,
-    marginVertical: 10,
-    backgroundColor: '#fff',
-  },
-  cardContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingBottom: 4,
-  },
-  leftSection: {
-    flex: 1,
-  },
-  mealName: {
+  cardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
-    marginBottom: 5,
   },
-  mealDescription: {
+  cardRating: {
     fontSize: 12,
-    color: '#757575',
-    marginBottom: 5,
+    color: '#666',
+    marginVertical: 4,
   },
-  mealPrice: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000',
+  cardDescription: {
+    fontSize: 12,
+    color: '#888',
   },
   addButton: {
-    // SVG is used for add button
+    backgroundColor: '#FFF',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 12,
+    width: 80,
+    borderWidth: 1,
+    borderColor: 'black',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    marginTop: 10,
   },
-  customizableText: {
-    fontSize: 12,
-    color: '#757575',
-    textAlign: 'right',
-    marginTop: 5,
-    marginRight: 12,
+  addButtonText: {
+    color: '#66A548',
+    fontWeight: 'bold',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
 

@@ -1,472 +1,439 @@
 import React from 'react';
 import {
+  View,
+  Text,
   ScrollView,
   StyleSheet,
-  Text,
-  View,
+  Image,
   TouchableOpacity,
+  Dimensions,
+  TextInput,
 } from 'react-native';
-import MenuIcon from '../../assets/menu.svg';
-import MealsIcon from '../../assets/food.svg';
-import Typography from '../../components/Typography/Typography';
-import FacebookIcon from '../../assets/fb.svg';
-import InstagramIcon from '../../assets/insta.svg';
-import LinkedInIcon from '../../assets/linkedin.svg';
-import TwitterIcon from '../../assets/x.svg';
-import Button from '../../components/Button/Button';
-import {useNavigation} from '@react-navigation/native';
+import Logo from '../../assets/logo.svg';
+import KhaoFitCoin from '../../assets/fitcoin.svg';
+import CartIcon from '../../assets/cart.svg';
+import MenuIcon from '../../assets/menu_icon.svg';
+import HeartIcon from '../../assets/heart.svg'; // Add heart icon for favorite
+import Footer1 from '../../assets/foot1.svg'; // Add heart icon for favorite
+import Footer2 from '../../assets/foot2.svg'; // Add heart icon for favorite
+import Footer3 from '../../assets/foot3.svg'; // Add heart icon for favorite
+import Carousel from '../../components/Carousel/Carousel';
+import AutoSlideCarousel from './AutoSlideCarousel';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../RootStackParams';
+import {useNavigation} from '@react-navigation/native';
 
-// Menu items
-const menuItems = [
-  {title: 'Meals', icon: MealsIcon},
-  {title: 'Meal Dabba', icon: MealsIcon},
-  {title: 'Sabji', icon: MealsIcon},
-  {title: 'Roti', icon: MealsIcon},
-  {title: 'Paratha', icon: MealsIcon},
-  {title: 'Dal, Rice', icon: MealsIcon},
-  {title: 'Stuffed Paratha', icon: MealsIcon},
-  {title: 'Sides', icon: MealsIcon},
-  {title: 'Desserts', icon: MealsIcon},
-];
+const {width} = Dimensions.get('window');
 
-// What's New items
-const whatsNewItems = [
+const meals = [
   {
-    title: 'Punjabi Rajma',
-    price: '₹55',
-    image: MealsIcon, // Assuming the image is also an SVG
-    tags: ['New'],
-    custom: true,
+    id: 1,
+    title: 'Sub Sandwich With Grilled Mushroom',
+    image: require('../../assets/burger.png'),
+    discount: '60% OFF',
+    price: '₹120',
+    rating: 4.2,
+    deliveryTime: '25-30 mins',
   },
   {
-    title: 'Kadai Paneer',
-    price: '₹65',
-    image: MealsIcon, // Assuming the image is also an SVG
-    tags: ['New', 'Must Try'],
-    custom: true,
+    id: 2,
+    title: 'Egg White Omelet',
+    image: require('../../assets/omlette.png'),
+    discount: '50% OFF',
+    price: '₹100',
+    rating: 3.5,
+    deliveryTime: '40-50 mins',
   },
   {
-    title: 'Chilli Aloo',
-    price: '₹65',
-    image: MealsIcon, // Assuming the image is also an SVG
-    tags: ['New', 'Must Try'],
-    custom: true,
-  },
-  {
-    title: 'Mutton Curry',
-    price: '₹65',
-    image: MealsIcon, // Assuming the image is also an SVG
-    tags: ['New', 'Must Try'],
-    custom: true,
+    id: 3,
+    title: 'Double Patty Chicken Burger',
+    image: require('../../assets/burger.png'),
+    discount: 'ITEMS AT ₹150',
+    rating: 4.8,
+    deliveryTime: '40-50 mins',
   },
 ];
 
-const bestsellers = [
+const categories = [
   {
-    title: 'Aloo Paratha Meal',
-    price: '₹99',
-    image: MealsIcon, // Use the actual SVG component
-    description:
-      'Aloo Paratha [2pc] + Dahi [100ml] + Achar + Chutney (Any 1) + Muk...',
-    tags: ['Bestseller'],
-    custom: true,
+    id: 1,
+    title: 'Salad Bowls',
+    image: require('../../assets/salad.png'),
   },
   {
-    title: 'Aloo Paratha Meal',
-    price: '₹99',
-    image: MealsIcon, // Use the actual SVG component
-    description:
-      'Aloo Paratha [2pc] + Dahi [100ml] + Achar + Chutney (Any 1) + Muk...',
-    tags: ['Bestseller'],
-    custom: true,
+    id: 2,
+    title: 'Mini Meals',
+    image: require('../../assets/mini.png'),
   },
   {
-    title: 'Aloo Paratha Meal',
-    price: '₹99',
-    image: MealsIcon, // Use the actual SVG component
-    description:
-      'Aloo Paratha [2pc] + Dahi [100ml] + Achar + Chutney (Any 1) + Muk...',
-    tags: ['Bestseller'],
-    custom: true,
+    id: 3,
+    title: 'Meals',
+    image: require('../../assets/meals.png'),
+  },
+  {
+    id: 4,
+    title: 'Shakes',
+    image: require('../../assets/shakes.png'),
   },
 ];
-
-// Render function for Bestsellers section
-const BestsellerCard = () => {
-  return (
-    <View style={styles.bestsellerContainer}>
-      <Text style={styles.whatsNewTitle}>Best Seller's</Text>
-      {bestsellers.map((item, index) => {
-        const IconComponent = item.image;
-        return (
-          <View key={index} style={styles.bestsellerItem}>
-            {/* Image Container */}
-            <View style={styles.imageContainer}>
-              <IconComponent width={100} height={80} style={{marginTop: -4}} />
-              {/* Positioned + ADD button */}
-              <Button
-                title="+ ADD"
-                onPress={() => {}}
-                width={'auto'}
-                height={34}
-                borderRadius={10}
-              />
-            </View>
-
-            {/* Bestseller Information */}
-            <View style={styles.bestsellerInfo}>
-              <View style={styles.tagContainer}>
-                {/* Green Icon */}
-                <View
-                  style={{
-                    height: 16,
-                    width: 16,
-                    borderWidth: 2,
-                    borderColor: 'green',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <View
-                    style={{
-                      borderRadius: 50,
-                      backgroundColor: 'green',
-                      width: 8,
-                      height: 8,
-                    }}></View>
-                </View>
-                {/* Bestseller Tag */}
-                <Text style={styles.bestsellerTag}>{item.tags[0]}</Text>
-              </View>
-              <Text style={styles.dishTitle}>{item.title}</Text>
-              <Text style={{color: 'black'}}>{item.description}</Text>
-              <Text style={[styles.priceText, {paddingTop: 6, fontSize: 20}]}>
-                {item.price}
-              </Text>
-            </View>
-          </View>
-        );
-      })}
-    </View>
-  );
-};
-
 const Homepage = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
   return (
-    <ScrollView style={styles.container}>
-      {/* Top Bar */}
-      <View style={styles.topBar}>
-        <MenuIcon width={24} height={24} />
-        <View style={styles.locationInfo}>
-          <Text style={styles.deliveryText}>DELIVER AT</Text>
-          <Text style={styles.locationText}>Airoli, Navi Mumbai, India</Text>
-          <Text style={styles.etaText}>ETA: Today 1:30 pm to 2:00 pm</Text>
-        </View>
-      </View>
-
-      {/* Explore Menu */}
-      <Text style={styles.exploreText}>Explore menu</Text>
-      <Typography
-        children="Choose from a healthy range of items"
-        style={{
-          fontWeight: '400',
-          fontSize: 14,
-          paddingHorizontal: 10,
-          marginBottom: 10,
-        }}
-      />
-      <View style={styles.menuGrid}>
-        {menuItems.map((item, index) => {
-          const IconComponent = item.icon;
-          return (
-            <View key={index} style={styles.menuItem}>
-              <TouchableOpacity onPress={() => navigation.navigate('MenuPage')}>
-                <IconComponent width={140} height={80} />
-              </TouchableOpacity>
-              <Text style={styles.menuTitle}>{item.title}</Text>
-            </View>
-          );
-        })}
-      </View>
-
-      {/* What's New Section */}
-      <Text style={styles.whatsNewTitle}>What's New</Text>
+    <>
       <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={styles.whatsNewContainer}>
-        {whatsNewItems.map((item, index) => {
-          const IconComponent = item.image;
-          return (
-            <View key={index} style={styles.whatsNewItem}>
-              <IconComponent width={160} height={120} style={{marginTop: -4}} />
-              <View
-                style={{
-                  height: 16,
-                  width: 16,
-                  borderWidth: 2,
-                  borderColor: 'green',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  position: 'absolute',
-                  left: 6,
-                  top: 6,
-                  backgroundColor: '#FFF',
-                }}>
-                <View
-                  style={{
-                    borderRadius: 50,
-                    backgroundColor: 'green',
-                    width: 8,
-                    height: 8,
-                  }}></View>
-              </View>
-              <View style={styles.whatsNewInfo}>
-                <View style={styles.tagContainer}>
-                  {item.tags.map((tag, i) => (
-                    <Text key={i} style={styles.tagText}>
-                      {tag}
-                    </Text>
-                  ))}
-                </View>
-                <Text style={styles.dishTitle}>{item.title}</Text>
-                <Text style={styles.priceText}>{item.price}</Text>
-                <Button
-                  title="+ ADD"
-                  onPress={() => {}}
-                  width={'auto'}
-                  height={36}
-                  borderRadius={10}
-                />
-                {item.custom && (
-                  <Text style={styles.customizableText}>customizable</Text>
-                )}
-              </View>
-            </View>
-          );
-        })}
-      </ScrollView>
+        style={{
+          paddingHorizontal: 14,
+          paddingVertical: 10,
+          backgroundColor: '#FFF',
+        }}>
+        {/* Top Navigation with Logo and Icons */}
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Logo />
+          <View
+            style={{
+              display: 'flex',
+              gap: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={() => navigation.navigate('ReferEarn')}>
+              <KhaoFitCoin width={30} height={30} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <CartIcon width={28} height={28} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <MenuIcon width={24} height={24} />
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      {/* Bestsellers Section */}
-      <BestsellerCard />
-
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>Happiness is Homemade :)</Text>
-        <Text style={styles.footerSubText}>Made with ❤️ by Khao.Fit</Text>
-
-        {/* Social Media Icons */}
-        <View style={styles.socialMediaContainer}>
-          <TouchableOpacity>
-            <FacebookIcon width={30} height={30} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <InstagramIcon width={30} height={30} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <TwitterIcon width={30} height={30} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <LinkedInIcon width={30} height={30} />
+        {/* Search Bar */}
+        <View style={styles.searchBarContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search for healthy food..."
+            placeholderTextColor="#888"
+          />
+          <TouchableOpacity style={styles.searchIcon}>
+            <Image
+              source={require('../../assets/search.png')}
+              resizeMode="contain"
+              style={{width: 20, height: 20}}
+            />
           </TouchableOpacity>
         </View>
+
+        {/* Carousel */}
+        <View>
+          <Carousel />
+        </View>
+
+        {/* Custom Meals Section */}
+        <View style={styles.mealSection}>
+          <Text style={styles.sectionTitle}>Custom meals for you</Text>
+          <View style={styles.mealGrid}>
+            {meals.map(meal => (
+              <View key={meal.id} style={styles.mealCard}>
+                {/* Discount Label */}
+
+                <View>
+                  <Image
+                    source={meal.image}
+                    resizeMode="cover"
+                    style={styles.mealImage}
+                  />
+                  <View style={styles.discountBadge}>
+                    <Text style={styles.discountText}>{meal.discount}</Text>
+                    {meal.price && (
+                      <Text style={styles.priceText}>UPTO {meal.price}</Text>
+                    )}
+                  </View>
+                </View>
+
+                {/* Heart Icon */}
+                <TouchableOpacity style={styles.heartIcon}>
+                  <HeartIcon width={24} height={24} />
+                </TouchableOpacity>
+
+                {/* Meal Title */}
+                <Text style={styles.mealTitle}>{meal.title}</Text>
+
+                {/* Rating and Delivery Time */}
+                <View style={styles.mealInfo}>
+                  <View style={styles.ratingContainer}>
+                    <Image
+                      source={require('../../assets/star.png')}
+                      resizeMode="contain"
+                      style={{width: 16, height: 16}}
+                    />
+                    <Text style={styles.ratingText}>{meal.rating}</Text>
+                  </View>
+                  <Text style={styles.deliveryText}>{meal.deliveryTime}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Categories Section */}
+        <View style={styles.categorySection}>
+          <Text style={styles.sectionTitle}>Fuel Right, Feel Right</Text>
+          <View style={styles.categoryGrid}>
+            {categories.map(category => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('MenuPage')}
+                key={category.id}
+                style={styles.categoryCard}>
+                <Image
+                  source={category.image}
+                  resizeMode="cover"
+                  style={styles.categoryImage}
+                />
+                <Text style={styles.categoryTitle}>{category.title}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.categorySection}>
+          <Text style={styles.sectionTitle}>Three Tiers, One Goal</Text>
+          <AutoSlideCarousel />
+        </View>
+
+        {/* Custom Meals Section */}
+        <View style={{marginTop: 20, marginBottom: 10}}>
+          <Text style={styles.sectionTitle}>Fan Favorites</Text>
+          <View style={styles.mealGrid}>
+            {meals.map(meal => (
+              <View key={meal.id} style={styles.mealCard}>
+                {/* Discount Label */}
+
+                <View>
+                  <Image
+                    source={meal.image}
+                    resizeMode="cover"
+                    style={styles.mealImage}
+                  />
+                  <View style={styles.discountBadge}>
+                    <Text style={styles.discountText}>{meal.discount}</Text>
+                    {meal.price && (
+                      <Text style={styles.priceText}>UPTO {meal.price}</Text>
+                    )}
+                  </View>
+                </View>
+
+                {/* Heart Icon */}
+                <TouchableOpacity style={styles.heartIcon}>
+                  <HeartIcon width={24} height={24} />
+                </TouchableOpacity>
+
+                {/* Meal Title */}
+                <Text style={styles.mealTitle}>{meal.title}</Text>
+
+                {/* Rating and Delivery Time */}
+                <View style={styles.mealInfo}>
+                  <View style={styles.ratingContainer}>
+                    <Image
+                      source={require('../../assets/star.png')}
+                      resizeMode="contain"
+                      style={{width: 16, height: 16}}
+                    />
+                    <Text style={styles.ratingText}>{meal.rating}</Text>
+                  </View>
+                  <Text style={styles.deliveryText}>{meal.deliveryTime}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View style={{marginBottom: 20}}>
+          <Text style={styles.sectionTitle}>Your guide to perfect rest</Text>
+          <Image
+            source={require('../../assets/sleep.png')}
+            resizeMode="contain"
+            style={{width: '100%', height: 150}}
+          />
+        </View>
+        <View style={{marginBottom: 20}}>
+          <Text style={styles.sectionTitle}>Hydrate smarter</Text>
+          <Image
+            source={require('../../assets/hydration.png')}
+            resizeMode="contain"
+            style={{width: '100%', height: 150}}
+          />
+        </View>
+      </ScrollView>
+      <View
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          width: '100%',
+          padding: 16,
+          backgroundColor: '#FFF',
+          flexDirection: 'row',
+        }}>
+        <Footer1 />
+        <Footer2 />
+        <Footer3 />
       </View>
-    </ScrollView>
+    </>
   );
 };
 
+// Styles
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  topBar: {
+  searchBarContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#64B5F6',
-    padding: 10,
     alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    marginVertical: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 0,
+    borderWidth: 1,
+    borderColor: 'black',
   },
-  locationInfo: {
+  searchInput: {
     flex: 1,
-    marginLeft: 10,
-  },
-  deliveryText: {
-    color: '#fff',
-    fontSize: 10,
-  },
-  locationText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  etaText: {
-    color: '#fff',
-    fontSize: 12,
-  },
-  exploreText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 20,
-    paddingLeft: 10,
+    fontSize: 16,
+    paddingLeft: 8,
     color: 'black',
   },
-  menuGrid: {
+  searchIcon: {
+    paddingHorizontal: 8,
+  },
+  mealSection: {
+    marginTop: -20,
+  },
+  sectionTitle: {
+    fontWeight: '500',
+    fontSize: 20,
+    color: 'black',
+    marginBottom: 10,
+  },
+  mealGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
   },
-  menuItem: {
-    width: '30%',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  menuTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'black',
-  },
-  // Styles for What's New section
-  whatsNewTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 20,
-    paddingLeft: 10,
-    color: 'black',
-  },
-  whatsNewContainer: {
-    paddingLeft: 10,
-  },
-  whatsNewItem: {
-    width: 160,
-    marginRight: 15,
-    borderRadius: 8,
+  mealCard: {
+    width: (width - 48) / 3, // Adjust width to fit 3 items per row with padding
     backgroundColor: '#fff',
-    elevation: 5, // For Android shadow
-    shadowColor: '#000', // For iOS shadow
-    shadowOffset: {width: 0, height: 2}, // For iOS shadow
-    shadowOpacity: 0.25, // For iOS shadow
-    shadowRadius: 3.84, // For iOS shadow
-    marginBottom: 20,
-  },
-
-  whatsNewInfo: {
+    borderRadius: 8,
     padding: 10,
+    alignItems: 'flex-start',
+    marginBottom: 16,
+    position: 'relative',
+    overflow: 'hidden',
+    paddingLeft: -8,
   },
-  tagContainer: {
-    flexDirection: 'row',
-    marginBottom: 5,
+  discountBadge: {
+    position: 'absolute',
+    bottom: 10,
+    left: 0,
+    // backgroundColor: 'rgba(255, 165, 0, 0.9)',
+    borderRadius: 5,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    zIndex: 2,
   },
-  tagText: {
-    backgroundColor: '#E91E63',
+  discountText: {
     color: '#fff',
-    fontSize: 10,
-    paddingHorizontal: 5,
-    borderRadius: 3,
-    marginRight: 5,
-  },
-  dishTitle: {
-    fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 5,
-    color: 'black',
+    fontSize: 14,
   },
   priceText: {
-    fontSize: 16,
-    color: '#000',
-    marginBottom: 5,
+    color: '#fff',
+    fontSize: 10,
+  },
+  heartIcon: {
+    position: 'absolute',
+    top: 16,
+    right: 10,
+  },
+  mealImage: {
+    width: 110,
+    height: 100,
+    borderRadius: 14,
+    marginBottom: 10,
+  },
+  mealTitle: {
+    fontSize: 12,
     fontWeight: '600',
+    textAlign: 'left',
+    color: 'black',
+    lineHeight: 14,
+    height: 30,
   },
-  addButton: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 5,
-    paddingVertical: 4,
-    alignItems: 'center',
-    width: 'auto',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 14,
-  },
-  customizableText: {
-    fontSize: 10,
-    color: '#757575',
-    marginTop: 5,
-  },
-
-  bestsellerContainer: {
-    paddingHorizontal: 10,
-  },
-  bestsellerItem: {
-    flexDirection: 'row',
-    marginBottom: 15,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  imageContainer: {
-    position: 'relative',
-    width: 100,
-    height: 80,
-  },
-  bestsellerInfo: {
-    flex: 1,
-    paddingLeft: 10,
-    width: 'auto',
-  },
-
-  bestsellerTag: {
-    backgroundColor: '#FF9800',
-    color: '#fff',
-    fontSize: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    borderRadius: 3,
-    marginLeft: 5, // Add some space between the veg icon and text
-  },
-
-  descriptionText: {
-    fontSize: 12,
-    color: '#757575',
-    marginBottom: 5,
-  },
-
-  // Footer styles
-  footerContainer: {
-    marginTop: 20,
-    padding: 20,
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
-  },
-  footerText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#757575',
-  },
-  footerSubText: {
-    fontSize: 12,
-    color: '#757575',
-    marginBottom: 20,
-  },
-  socialMediaContainer: {
+  mealInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: 200,
+    alignItems: 'center',
+    marginTop: 8,
+    width: '100%',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ratingText: {
+    marginLeft: 4,
+    fontSize: 12,
+    color: 'gray',
+  },
+  deliveryText: {
+    fontSize: 12,
+    color: 'gray',
+  },
+  categorySection: {
+    marginTop: 20,
+  },
+  // sectionTitle: {
+  //   fontWeight: '500',
+  //   fontSize: 20,
+  //   color: 'black',
+  //   marginBottom: 10,
+  //   textAlign: 'center',
+  // },
+  categoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  categoryCard: {
+    width: (width - 48) / 2 - 10, // Fit 2 items per row with margin
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 10,
+    alignItems: 'center',
+    marginBottom: 16,
+    elevation: 2, // Add shadow for iOS/Android
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  categoryImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  categoryTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
+    color: 'black',
   },
 });
 

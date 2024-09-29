@@ -8,6 +8,7 @@ import Homepage from './src/pages/Homepage/Homepage';
 import LoginPage from './src/pages/Login/Login';
 import MenuPage from './src/pages/MenuPage/MenuPage';
 import OtpVerification from './src/pages/OTP/OTP';
+import ReferEarn from './src/pages/ReferEarn/ReferEarn';
 import SignupPage from './src/pages/Signup/Signup';
 
 export const AppRoutes = [
@@ -56,7 +57,18 @@ export const AppRoutes = [
   {
     name: 'MenuPage',
     component: MenuPage,
-    options: {headerShown: false},
+    options: {
+      title: '',
+      headerStyle: {
+        backgroundColor: '#97795E', // Add opacity here (0.8 is for 80% opacity)
+      },
+      headerTitleStyle: {
+        fontSize: 16,
+        fontWeight: '100',
+        color: 'black',
+      },
+      headerTitleAlign: 'center',
+    },
   },
   {
     name: 'Cart',
@@ -141,6 +153,22 @@ export const AppRoutes = [
   {
     name: 'BMICaloriesPage',
     component: BMICaloriesPage,
+    options: {
+      title: '',
+      headerStyle: {
+        backgroundColor: '#FFF',
+      },
+      headerTitleStyle: {
+        fontSize: 16,
+        fontWeight: '100',
+        color: 'black',
+      },
+      headerTitleAlign: 'center',
+    },
+  },
+  {
+    name: 'ReferEarn',
+    component: ReferEarn,
     options: {
       title: '',
       headerStyle: {

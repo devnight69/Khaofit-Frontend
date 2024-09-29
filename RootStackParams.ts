@@ -10,4 +10,5 @@ export type RootStackParamList = {
   BMIResultPage: any;
   HealthGoals: any;
   BMICaloriesPage: any;
+  ReferEarn: any;
 };
