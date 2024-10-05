@@ -5,13 +5,16 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
-import SvgKhaoFitLogo from '../../assets/logo.svg';
-import SvgDeliveryGuy from '../../assets/delivery_guy.svg';
+import SvgKhaoFitLogo from '~/assets/logo.svg';
+import SvgDeliveryGuy from '~/assets/delivery_guy.svg';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../../RootStackParams';
 import {useNavigation} from '@react-navigation/native';
-import {colors} from '../../gloabalStyles/globalStyles';
+import {colors} from '~/gloabalStyles/globalStyles';
+import DeliveryGuyAnimation from '~/utils/LottieAnimation/DeliveryGuy.json';
+import LottieView from 'lottie-react-native';
+import {RootStackParamList} from 'RootStackParams';
 
 const LoginPage = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -26,13 +29,19 @@ const LoginPage = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.logoContainer}>
         <SvgKhaoFitLogo width={300} height={70} />
       </View>
 
       <View style={styles.imageContainer}>
-        <SvgDeliveryGuy width={360} height={360} />
+        <LottieView
+          resizeMode="contain"
+          source={DeliveryGuyAnimation}
+          autoPlay
+          loop={true}
+          style={{width: 400, height: 400}}
+        />
       </View>
 
       <View style={styles.formContainer}>
@@ -66,14 +75,14 @@ const LoginPage = () => {
           <Text style={styles.continueButtonText}>Continue</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.signupContainer}>
+        {/* <TouchableOpacity style={styles.signupContainer}>
           <Text style={styles.signupText}>Don't have an account?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('signupPage')}>
             <Text style={styles.signupLink}> Sign up</Text>
           </TouchableOpacity>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -81,11 +90,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   logoContainer: {
-    marginTop: 50,
+    marginTop: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -133,7 +140,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
   continueButtonText: {
     fontSize: 18,

@@ -1,3 +1,4 @@
+import TabNavigator from '~/components/Footer/TabNavigator';
 import BMIInputPage from './src/pages/BMI/BMIInputPage';
 import BMIResultPage from './src/pages/BMI/BMIResultPage';
 import KnowAboutBMI from './src/pages/BMI/KnowAboutBMI';
@@ -16,24 +17,27 @@ export const AppRoutes = [
     name: 'loginPage',
     component: LoginPage,
     options: {headerShown: false},
+    headerTintColor: '#FFF',
   },
   {
     name: 'homepage',
-    component: Homepage,
+    component: TabNavigator,
     options: {headerShown: false},
+    headerTintColor: '#FFF',
   },
   {
     name: 'otpPage',
     component: OtpVerification,
     options: {
+      headerTintColor: '#FFF',
       title: 'OTP Verification',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -42,14 +46,15 @@ export const AppRoutes = [
     name: 'signupPage',
     component: SignupPage,
     options: {
+      headerTintColor: '#FFF',
       title: '',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -58,6 +63,7 @@ export const AppRoutes = [
     name: 'MenuPage',
     component: MenuPage,
     options: {
+      headerTintColor: '#FFF',
       title: '',
       headerStyle: {
         backgroundColor: '#97795E', // Add opacity here (0.8 is for 80% opacity)
@@ -65,7 +71,7 @@ export const AppRoutes = [
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -74,14 +80,15 @@ export const AppRoutes = [
     name: 'Cart',
     component: Cart,
     options: {
+      headerTintColor: '#FFF',
       title: 'My Cart',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -90,14 +97,15 @@ export const AppRoutes = [
     name: 'KnowAboutBMI',
     component: KnowAboutBMI,
     options: {
+      headerTintColor: '#FFF',
       title: 'Know About BMI',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -106,14 +114,15 @@ export const AppRoutes = [
     name: 'BMIInputPage',
     component: BMIInputPage,
     options: {
+      headerTintColor: '#FFF',
       title: '',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -122,14 +131,15 @@ export const AppRoutes = [
     name: 'BMIResultPage',
     component: BMIResultPage,
     options: {
+      headerTintColor: '#FFF',
       title: 'Your BMI Result',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -138,14 +148,15 @@ export const AppRoutes = [
     name: 'HealthGoals',
     component: HealthGoals,
     options: {
+      headerTintColor: '#FFF',
       title: 'Health Goals',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -154,14 +165,15 @@ export const AppRoutes = [
     name: 'BMICaloriesPage',
     component: BMICaloriesPage,
     options: {
+      headerTintColor: '#FFF',
       title: '',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },
@@ -170,14 +182,15 @@ export const AppRoutes = [
     name: 'ReferEarn',
     component: ReferEarn,
     options: {
+      headerTintColor: '#FFF',
       title: '',
       headerStyle: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#10C0DF',
       },
       headerTitleStyle: {
         fontSize: 16,
         fontWeight: '100',
-        color: 'black',
+        color: '#FFF',
       },
       headerTitleAlign: 'center',
     },

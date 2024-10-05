@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import Button from '../../components/Button/Button';
 import {useNavigation} from '@react-navigation/native';
@@ -60,50 +61,54 @@ const OtpVerification = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.subHeader}>Mobile Verification</Text>
-      <Text style={styles.instructions}>
-        Enter the verification code sent on your mobile number, +91 98611*****
-      </Text>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.subHeader}>Mobile Verification</Text>
+        <Text style={styles.instructions}>
+          Enter the verification code sent on your mobile number, +91 98611*****
+        </Text>
 
-      <View style={styles.otpContainer}>
-        {otp.map((digit, index) => (
-          <TextInput
-            key={index}
-            ref={otpRefs[index]} // Attach the ref to each TextInput
-            style={styles.otpInput}
-            keyboardType="numeric"
-            maxLength={1}
-            value={digit}
-            onChangeText={value => handleOtpChange(index, value)}
-            onKeyPress={({nativeEvent}) => {
-              if (nativeEvent.key === 'Backspace' && index > 0 && !digit) {
-                otpRefs[index - 1]?.current?.focus(); // Move back to the previous input on Backspace
-              }
-            }}
-          />
-        ))}
+        <View style={styles.otpContainer}>
+          {otp.map((digit, index) => (
+            <TextInput
+              key={index}
+              ref={otpRefs[index]} // Attach the ref to each TextInput
+              style={styles.otpInput}
+              keyboardType="numeric"
+              maxLength={1}
+              value={digit}
+              onChangeText={value => handleOtpChange(index, value)}
+              onKeyPress={({nativeEvent}) => {
+                if (nativeEvent.key === 'Backspace' && index > 0 && !digit) {
+                  otpRefs[index - 1]?.current?.focus(); // Move back to the previous input on Backspace
+                }
+              }}
+            />
+          ))}
+        </View>
+
+        <View style={styles.resendContainer}>
+          <Text style={styles.resendText}>Didn’t receive code?</Text>
+          <TouchableOpacity onPress={handleResendOtp}>
+            <Text style={styles.resendLink}>Resend</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.timerContainer}>
+          <Text style={styles.timerText}>{`00:${
+            timer < 10 ? `0${timer}` : timer
+          }`}</Text>
+        </View>
       </View>
 
-      <View style={styles.resendContainer}>
-        <Text style={styles.resendText}>Didn’t receive code?</Text>
-        <TouchableOpacity onPress={handleResendOtp}>
-          <Text style={styles.resendLink}>Resend</Text>
-        </TouchableOpacity>
+      <View style={styles.footer}>
+        <Button
+          title="Continue"
+          onPress={() => navigation.navigate('signupPage')}
+          width={'100%'}
+        />
       </View>
-
-      <View style={styles.timerContainer}>
-        <Text style={styles.timerText}>{`00:${
-          timer < 10 ? `0${timer}` : timer
-        }`}</Text>
-      </View>
-
-      <Button
-        title="Continue"
-        onPress={() => navigation.navigate('signupPage')}
-        width={'100%'}
-      />
-    </View>
+    </>
   );
 };
 
@@ -161,6 +166,29 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 14,
     color: '#808080',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#FFF',
+    gap: 16,
+  },
+  button: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12, // Consistent rounded corners
+    paddingVertical: 14, // Increased padding for more clickable area
+    // marginHorizontal: 10,
+    alignItems: 'center',
+    elevation: 3, // Added elevation for better button visibility
+  },
+  buttonText: {
+    fontSize: 18, // Larger button text for better readability
+    color: '#00AEEF',
+    fontWeight: 'bold',
   },
 });
 

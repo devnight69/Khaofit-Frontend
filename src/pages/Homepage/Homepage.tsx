@@ -13,15 +13,16 @@ import Logo from '../../assets/logo.svg';
 import KhaoFitCoin from '../../assets/fitcoin.svg';
 import CartIcon from '../../assets/cart.svg';
 import MenuIcon from '../../assets/menu_icon.svg';
-import HeartIcon from '../../assets/heart.svg'; // Add heart icon for favorite
-import Footer1 from '../../assets/foot1.svg'; // Add heart icon for favorite
-import Footer2 from '../../assets/foot2.svg'; // Add heart icon for favorite
-import Footer3 from '../../assets/foot3.svg'; // Add heart icon for favorite
+import HeartIcon from '../../assets/heart.svg';
+import Footer1 from '../../assets/foot1.svg';
+import Footer2 from '../../assets/foot2.svg';
+import Footer3 from '../../assets/foot3.svg';
 import Carousel from '../../components/Carousel/Carousel';
 import AutoSlideCarousel from './AutoSlideCarousel';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../RootStackParams';
 import {useNavigation} from '@react-navigation/native';
+import Footer from '~/components/Footer/Footer';
 
 const {width} = Dimensions.get('window');
 
@@ -81,13 +82,12 @@ const Homepage = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
     <>
-      <ScrollView
+      <View
         style={{
-          paddingHorizontal: 14,
-          paddingVertical: 10,
+          paddingHorizontal: 20,
+          paddingTop: 20,
           backgroundColor: '#FFF',
         }}>
-        {/* Top Navigation with Logo and Icons */}
         <View
           style={{
             display: 'flex',
@@ -130,7 +130,13 @@ const Homepage = () => {
             />
           </TouchableOpacity>
         </View>
-
+      </View>
+      <ScrollView
+        style={{
+          paddingHorizontal: 14,
+          paddingVertical: 10,
+          backgroundColor: '#FFF',
+        }}>
         {/* Carousel */}
         <View>
           <Carousel />
@@ -272,20 +278,8 @@ const Homepage = () => {
           />
         </View>
       </ScrollView>
-      <View
-        style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          width: '100%',
-          padding: 16,
-          backgroundColor: '#FFF',
-          flexDirection: 'row',
-        }}>
-        <Footer1 />
-        <Footer2 />
-        <Footer3 />
-      </View>
+
+      <Footer />
     </>
   );
 };

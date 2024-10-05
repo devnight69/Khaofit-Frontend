@@ -1,6 +1,13 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ScrollView,
+} from 'react-native';
 import {RootStackParamList} from '../../../RootStackParams';
 import {useNavigation} from '@react-navigation/native';
 
@@ -21,54 +28,58 @@ const HealthGoals = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.headingBold}>What Goals Do You Want to Achieve?</Text>
+    <ScrollView style={{backgroundColor: '#00AEEF'}}>
+      <View style={styles.container}>
+        <Text style={styles.headingBold}>
+          What Goals Do You Want to Achieve?
+        </Text>
 
-      <View style={styles.optionsContainer}>
-        {/* Weight Loss Option */}
-        <TouchableOpacity
-          style={[
-            styles.optionCard,
-            selectedGoal === 'weight_loss' && styles.selectedOption,
-          ]}
-          onPress={() => handleGoalSelect('weight_loss')}>
-          <Image
-            source={require('../../assets/weight_loss.png')}
-            style={styles.optionImage}
-          />
-          <Text style={styles.optionText}>Weight Loss</Text>
-        </TouchableOpacity>
+        <View style={styles.optionsContainer}>
+          {/* Weight Loss Option */}
+          <TouchableOpacity
+            style={[
+              styles.optionCard,
+              selectedGoal === 'weight_loss' && styles.selectedOption,
+            ]}
+            onPress={() => handleGoalSelect('weight_loss')}>
+            <Image
+              source={require('../../assets/weight_loss.png')}
+              style={styles.optionImage}
+            />
+            <Text style={styles.optionText}>Weight Loss</Text>
+          </TouchableOpacity>
 
-        {/* Bulk Up Option */}
-        <TouchableOpacity
-          style={[
-            styles.optionCard,
-            selectedGoal === 'bulk_up' && styles.selectedOption,
-          ]}
-          onPress={() => handleGoalSelect('bulk_up')}>
-          <Image
-            source={require('../../assets/bulk_up.png')}
-            style={styles.optionImage}
-          />
-          <Text style={styles.optionText}>Bulk Up</Text>
-        </TouchableOpacity>
+          {/* Bulk Up Option */}
+          <TouchableOpacity
+            style={[
+              styles.optionCard,
+              selectedGoal === 'bulk_up' && styles.selectedOption,
+            ]}
+            onPress={() => handleGoalSelect('bulk_up')}>
+            <Image
+              source={require('../../assets/bulk_up.png')}
+              style={styles.optionImage}
+            />
+            <Text style={styles.optionText}>Bulk Up</Text>
+          </TouchableOpacity>
 
-        {/* Stay Fit Option */}
-        <TouchableOpacity
-          style={[
-            styles.optionCard,
-            selectedGoal === 'stay_fit' && styles.selectedOption,
-          ]}
-          onPress={() => handleGoalSelect('stay_fit')}>
-          <Image
-            source={require('../../assets/stay_fit.png')}
-            style={styles.optionImage}
-          />
-          <Text style={styles.optionText}>Stay Fit</Text>
-        </TouchableOpacity>
+          {/* Stay Fit Option */}
+          <TouchableOpacity
+            style={[
+              styles.optionCard,
+              selectedGoal === 'stay_fit' && styles.selectedOption,
+            ]}
+            onPress={() => handleGoalSelect('stay_fit')}>
+            <Image
+              source={require('../../assets/stay_fit.png')}
+              style={styles.optionImage}
+            />
+            <Text style={styles.optionText}>Stay Fit</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <View style={styles.buttonContainer}>
+      <View style={styles.footer}>
         <TouchableOpacity
           style={styles.button}
           // onPress={() => navigation.navigate('NextPage')}
@@ -82,7 +93,7 @@ const HealthGoals = () => {
           <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -139,17 +150,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#00AEEF',
+    gap: 16,
+  },
   button: {
+    flex: 1,
     backgroundColor: '#FFFFFF',
-    borderRadius: 25,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
+    borderRadius: 12, // Consistent rounded corners
+    paddingVertical: 14, // Increased padding for more clickable area
+    // marginHorizontal: 10,
     alignItems: 'center',
-    elevation: 3,
-    width: '46%',
+    elevation: 3, // Added elevation for better button visibility
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 18, // Larger button text for better readability
     color: '#00AEEF',
     fontWeight: 'bold',
   },

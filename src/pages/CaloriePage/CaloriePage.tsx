@@ -8,27 +8,21 @@ const BMICaloriesPage = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>
-        Based on your BMI and goal, you should consume:
-      </Text>
-      <Image
-        source={require('../../assets/whey-image.png')}
-        style={styles.imageTop}
-      />
-      <Text style={styles.calorieText}>250 - 500 calories</Text>
-      <Image
-        source={require('../../assets/dumbbell-image.png')}
-        style={styles.imageBottom}
-      />
-      <View style={styles.buttonContainer}>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.headerText}>
+          Based on your BMI and goal, you should consume:
+        </Text>
+        <Text style={styles.calorieText}>250 - 500 calories</Text>
+      </View>
+      <View style={styles.footer}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('homepage')}>
           <Text style={styles.buttonText}>Go to Homepage</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -39,17 +33,26 @@ const styles = StyleSheet.create({
     width: '80%', // Increased width for button alignment
     marginBottom: 30,
   },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#00AEEF',
+    gap: 16,
+  },
   button: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    borderRadius: 25, // Consistent rounded corners
-    paddingVertical: 15, // Increased padding for more clickable area
-    marginHorizontal: 10,
+    borderRadius: 12, // Consistent rounded corners
+    paddingVertical: 14, // Increased padding for more clickable area
+    // marginHorizontal: 10,
     alignItems: 'center',
     elevation: 3, // Added elevation for better button visibility
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 18, // Larger button text for better readability
     color: '#00AEEF',
     fontWeight: 'bold',
   },
