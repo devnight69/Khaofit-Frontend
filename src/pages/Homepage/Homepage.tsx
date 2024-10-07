@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -14,15 +14,13 @@ import KhaoFitCoin from '../../assets/fitcoin.svg';
 import CartIcon from '../../assets/cart.svg';
 import MenuIcon from '../../assets/menu_icon.svg';
 import HeartIcon from '../../assets/heart.svg';
-import Footer1 from '../../assets/foot1.svg';
-import Footer2 from '../../assets/foot2.svg';
-import Footer3 from '../../assets/foot3.svg';
 import Carousel from '../../components/Carousel/Carousel';
 import AutoSlideCarousel from './AutoSlideCarousel';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../RootStackParams';
 import {useNavigation} from '@react-navigation/native';
 import Footer from '~/components/Footer/Footer';
+import ProductModal from './ProductModal';
 
 const {width} = Dimensions.get('window');
 
@@ -80,6 +78,8 @@ const categories = [
 const Homepage = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const [isModalVisible, setModalVisible] = useState(false);
   return (
     <>
       <View
@@ -137,7 +137,6 @@ const Homepage = () => {
           paddingVertical: 10,
           backgroundColor: '#FFF',
         }}>
-        {/* Carousel */}
         <View>
           <Carousel />
         </View>
@@ -147,9 +146,10 @@ const Homepage = () => {
           <Text style={styles.sectionTitle}>Custom meals for you</Text>
           <View style={styles.mealGrid}>
             {meals.map(meal => (
-              <View key={meal.id} style={styles.mealCard}>
-                {/* Discount Label */}
-
+              <TouchableOpacity
+                onPress={() => setModalVisible(true)}
+                key={meal.id}
+                style={styles.mealCard}>
                 <View>
                   <Image
                     source={meal.image}
@@ -164,15 +164,12 @@ const Homepage = () => {
                   </View>
                 </View>
 
-                {/* Heart Icon */}
                 <TouchableOpacity style={styles.heartIcon}>
                   <HeartIcon width={24} height={24} />
                 </TouchableOpacity>
 
-                {/* Meal Title */}
                 <Text style={styles.mealTitle}>{meal.title}</Text>
 
-                {/* Rating and Delivery Time */}
                 <View style={styles.mealInfo}>
                   <View style={styles.ratingContainer}>
                     <Image
@@ -184,7 +181,7 @@ const Homepage = () => {
                   </View>
                   <Text style={styles.deliveryText}>{meal.deliveryTime}</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -220,8 +217,6 @@ const Homepage = () => {
           <View style={styles.mealGrid}>
             {meals.map(meal => (
               <View key={meal.id} style={styles.mealCard}>
-                {/* Discount Label */}
-
                 <View>
                   <Image
                     source={meal.image}
@@ -279,6 +274,10 @@ const Homepage = () => {
         </View>
       </ScrollView>
 
+      <ProductModal
+        setModalVisible={setModalVisible}
+        isModalVisible={isModalVisible}
+      />
       <Footer />
     </>
   );
@@ -392,13 +391,7 @@ const styles = StyleSheet.create({
   categorySection: {
     marginTop: 20,
   },
-  // sectionTitle: {
-  //   fontWeight: '500',
-  //   fontSize: 20,
-  //   color: 'black',
-  //   marginBottom: 10,
-  //   textAlign: 'center',
-  // },
+
   categoryGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -406,13 +399,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   categoryCard: {
-    width: (width - 48) / 2 - 10, // Fit 2 items per row with margin
+    width: (width - 48) / 2 - 10,
     backgroundColor: '#fff',
     borderRadius: 8,
     padding: 10,
     alignItems: 'center',
     marginBottom: 16,
-    elevation: 2, // Add shadow for iOS/Android
+    elevation: 2,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 4,

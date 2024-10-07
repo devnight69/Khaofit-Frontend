@@ -4,166 +4,242 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Modal,
   StyleSheet,
+  Image,
 } from 'react-native';
+import ReactNativeModal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import LocationIcom from '~/assets/location_new.svg';
+import CloseIcon from '~/assets/close.svg';
+import Button from '~/components/Button/Button';
 
 const AddAddressModal = ({isModalVisible, setIsModalVisible}: any) => {
-  const [address, setAddress] = useState('');
-  const [landmark, setLandmark] = useState('');
-  const [type, setType] = useState('');
+  const [house, setHouse] = useState('');
+  const [area, setArea] = useState('');
+  const [directions, setDirections] = useState('');
+  const [selectedAddressType, setSelectedAddressType] = useState(''); // for tracking selected chip
 
-  const handleAddAddress = () => {
-    if (address && landmark && type) {
-      // Handle the address submission logic
-      setIsModalVisible(false);
-    } else {
-      //   alert('Please fill in all required fields');
-    }
-  };
-
-  const RadioButtonGroup = ({selectedType, onTypeChange}: any) => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginVertical: 10,
-        }}>
-        {['Home', 'Work', 'Other'].map(item => (
-          <TouchableOpacity
-            key={item}
-            style={{
-              flex: 1,
-              padding: 10,
-              borderWidth: 1,
-              borderColor: selectedType === item ? '#000' : '#ddd',
-              backgroundColor: selectedType === item ? '#ddd' : 'transparent',
-              alignItems: 'center',
-              borderRadius: 5,
-              marginHorizontal: 5,
-            }}
-            onPress={() => onTypeChange(item)}>
-            <Text style={{color: 'black'}}>{item}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    );
-  };
+  const closeModal = () => setIsModalVisible(false);
 
   return (
-    <Modal
-      visible={isModalVisible}
-      transparent={true}
-      animationType="slide"
-      onRequestClose={() => setIsModalVisible(false)}>
-      <View style={styles.modalBackground}>
-        <View style={styles.modalContainer}>
-          {/* Close button */}
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setIsModalVisible(false)}>
-            <Text style={styles.closeText}>X</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.header}>Add New Address</Text>
-
-          <Text style={styles.subHeader}>Your Location</Text>
-          <Text style={styles.location}>
-            Powai, Powai, Mumbai, Maharashtra, India
-          </Text>
-
-          <TextInput
-            style={[styles.input, !address && styles.requiredInput]}
-            placeholder="Address"
-            value={address}
-            onChangeText={setAddress}
-          />
-          {!address && <Text style={styles.requiredText}>Required</Text>}
-
-          <TextInput
-            style={[styles.input, !landmark && styles.requiredInput]}
-            placeholder="Landmark"
-            value={landmark}
-            onChangeText={setLandmark}
-          />
-          {!landmark && <Text style={styles.requiredText}>Required</Text>}
-
-          <Text style={styles.subHeader}>Type</Text>
-          <RadioButtonGroup selectedType={type} onTypeChange={setType} />
-          {!type && <Text style={styles.requiredText}>Required</Text>}
-
-          <TouchableOpacity style={styles.addButton} onPress={handleAddAddress}>
-            <Text style={styles.addButtonText}>ENTER ADDRESS</Text>
-          </TouchableOpacity>
+    <ReactNativeModal
+      isVisible={isModalVisible}
+      onBackdropPress={closeModal}
+      style={styles.modalContainer}>
+      <View style={styles.modalContent}>
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            zIndex: 999,
+            marginTop: -40,
+            right: 10,
+            backgroundColor: '#FFF',
+            borderRadius: 50,
+            width: 30,
+            height: 30,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={closeModal}>
+          <CloseIcon width={16} height={16} />
+        </TouchableOpacity>
+        <View style={styles.locationHeader}>
+          <LocationIcom width={30} height={30} />
+          <View style={styles.locationTextContainer}>
+            <Text style={styles.locationTitle}>Mahanadi Vihar</Text>
+            <Text style={styles.locationSubtitle}>
+              Mahanadi Vihar, Cuttack, Odisha 753004, India
+            </Text>
+          </View>
         </View>
+
+        <TextInput
+          style={styles.inputField}
+          placeholder="House / Flat / Block No."
+          value={house}
+          onChangeText={setHouse}
+          placeholderTextColor={'black'}
+        />
+
+        <TextInput
+          style={styles.inputField}
+          placeholder="Apartment / Road / Area (Optional)"
+          value={area}
+          onChangeText={setArea}
+          placeholderTextColor={'black'}
+        />
+
+        {/* Save As Options */}
+        <View style={styles.saveAsContainer}>
+          <Text style={styles.saveAsTitle}>Save As</Text>
+          <View style={styles.saveOptionsRow}>
+            <TouchableOpacity
+              style={[
+                styles.saveOption,
+                selectedAddressType === 'Home' && styles.selectedOption,
+              ]}
+              onPress={() => setSelectedAddressType('Home')}>
+              <Image
+                source={require('~/assets/home_blue.png')}
+                style={{width: 30, height: 30}}
+              />
+              <Text
+                style={[
+                  styles.addressTitle,
+                  selectedAddressType === 'Home' && styles.selectedText,
+                ]}>
+                Home
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.saveOption,
+                selectedAddressType === 'Work' && styles.selectedOption,
+              ]}
+              onPress={() => setSelectedAddressType('Work')}>
+              <Image
+                source={require('~/assets/work.png')}
+                style={{width: 30, height: 30}}
+              />
+              <Text
+                style={[
+                  styles.addressTitle,
+                  selectedAddressType === 'Work' && styles.selectedText,
+                ]}>
+                Work
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Submit Button */}
+        <Button title="Add Address" width={'100%'} onPress={closeModal} />
       </View>
-    </Modal>
+    </ReactNativeModal>
   );
 };
 
 const styles = StyleSheet.create({
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  selectedOption: {
+    borderColor: '#0A9AB2',
+    backgroundColor: '#EDFCFF',
+  },
+  selectedText: {
+    color: '#0A9AB2',
+  },
+  addressTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
   },
   modalContainer: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  modalContent: {
     backgroundColor: 'white',
-    padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    padding: 20,
   },
-  closeButton: {
-    alignSelf: 'flex-end',
+  locationHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  closeText: {
+  locationTextContainer: {
+    marginLeft: 10,
+  },
+  locationTitle: {
     fontSize: 18,
-    color: 'black',
-  },
-  header: {
-    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
     color: 'black',
   },
-  subHeader: {
-    fontSize: 16,
-    marginTop: 10,
-    marginBottom: 5,
-    color: 'black',
+  locationSubtitle: {
+    fontSize: 14,
+    color: 'grey',
   },
-  location: {
-    color: 'black',
-    marginBottom: 15,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: 'gray',
+  infoBox: {
+    backgroundColor: '#FFF4E5',
+    borderRadius: 10,
     padding: 10,
+    marginVertical: 10,
+  },
+  infoText: {
+    color: '#FF5722',
+    fontSize: 14,
+  },
+  inputField: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    marginBottom: 20,
+    fontSize: 16,
+    color: 'black',
+  },
+  voiceInputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  voiceInputLabel: {
+    fontSize: 14,
+    color: '#FF5722',
+  },
+  voiceRecordButton: {
+    backgroundColor: '#FFF4E5',
+    borderRadius: 50,
+    padding: 10,
+  },
+  textArea: {
+    borderWidth: 1,
+    borderColor: '#ccc',
     borderRadius: 5,
-    marginBottom: 10,
-    color: 'black',
+    padding: 10,
+    height: 100,
+    marginBottom: 5,
+    textAlignVertical: 'top',
   },
-  requiredInput: {
-    borderColor: 'red',
-    color: 'black',
-  },
-  requiredText: {
-    color: 'red',
+  charCount: {
+    alignSelf: 'flex-end',
     fontSize: 12,
-    marginBottom: 10,
+    color: 'grey',
   },
-  addButton: {
-    backgroundColor: '#F7C5B2',
+  saveAsContainer: {
+    marginBottom: 20,
+  },
+  saveAsTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  saveOptionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 10,
+    gap: 20,
+  },
+  saveOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    color: 'black',
+    gap: 6,
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 12,
+  },
+  submitButton: {
+    backgroundColor: '#FF5722',
+    borderRadius: 5,
     paddingVertical: 15,
     alignItems: 'center',
-    borderRadius: 5,
-    marginTop: 20,
+    marginTop: 10,
   },
-  addButtonText: {
+  submitButtonText: {
     color: 'white',
-    fontSize: 16,
     fontWeight: 'bold',
   },
 });

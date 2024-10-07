@@ -11,6 +11,7 @@ import MenuPage from './src/pages/MenuPage/MenuPage';
 import OtpVerification from './src/pages/OTP/OTP';
 import ReferEarn from './src/pages/ReferEarn/ReferEarn';
 import SignupPage from './src/pages/Signup/Signup';
+import PaymentOptions from '~/pages/Payment/PaymentOptions';
 
 export const AppRoutes = [
   {
@@ -181,6 +182,23 @@ export const AppRoutes = [
   {
     name: 'ReferEarn',
     component: ReferEarn,
+    options: {
+      headerTintColor: '#FFF',
+      title: '',
+      headerStyle: {
+        backgroundColor: '#10C0DF',
+      },
+      headerTitleStyle: {
+        fontSize: 16,
+        fontWeight: '100',
+        color: '#FFF',
+      },
+      headerTitleAlign: 'center',
+    },
+  },
+  {
+    name: 'PaymentOptions',
+    component: PaymentOptions,
     options: {
       headerTintColor: '#FFF',
       title: '',

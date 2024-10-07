@@ -6,25 +6,33 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Image,
 } from 'react-native';
-import ClockIcon from '../../assets/Clock.svg';
-import LocationIcon from '../../assets/Location.svg';
 import ReactNativeModal from 'react-native-modal';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AddAddressModal from './AddAddressModal';
+import Button from '~/components/Button/Button';
+import Typography from '~/components/Typography/Typography';
+import ArrowDropDown from '~/assets/dropdown_new.svg';
+import ViewAddressesModal from './ViewAddressesModal';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from 'RootStackParams';
 
 const Cart = () => {
   const [quantity, setQuantity] = useState(1);
-  const [isDelivery, setIsDelivery] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [showSelectSlotModal, setShowSelectSlotModal] = useState(false);
+  const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
-  const [showPaymentModal, setShowPaymentModal] = useState(false); // New state for payment modal
-  const [selectedPayment, setSelectedPayment] = useState(''); // Track selected payment mode
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showAddAddressModal, setAddShowAddressModal] = useState(false);
+  const [slotSelected, setSlotSelected] = useState(false);
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   // Functions to handle date/time picker
   const onChangeDate = (event: any, date: any) => {
@@ -51,9 +59,42 @@ const Cart = () => {
     <>
       <ScrollView style={styles.container}>
         {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerText}>CART - 1 Item</Text>
-        </View>
+        <TouchableOpacity
+          onPress={() => setShowAddressModal(true)}
+          style={styles.header}>
+          <View
+            style={{
+              display: 'flex',
+              gap: 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={require('~/assets/home_blue.png')}
+              style={{width: 20, height: 20}}
+            />
+            <Text style={styles.headerText} numberOfLines={1}>
+              45-50 mins to Home
+            </Text>
+          </View>
+
+          <View
+            style={{
+              display: 'flex',
+              gap: 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexShrink: 1,
+            }}>
+            <Text
+              style={[styles.headerText, {width: '85%', paddingLeft: 20}]}
+              numberOfLines={1}
+              ellipsizeMode="tail">
+              Uttap Swain Building, Nayabazar
+            </Text>
+            <ArrowDropDown width={20} height={20} />
+          </View>
+        </TouchableOpacity>
 
         {/* Cart Item */}
         <View style={styles.cartItem}>
@@ -84,20 +125,11 @@ const Cart = () => {
           placeholderTextColor={'black'}
         />
 
-        {/* Reward message */}
-        {/* <View style={styles.rewardContainer}>
-          <Text style={styles.rewardText}>
-            You will earn 5 ♥ after order is delivered!
-          </Text>
-        </View> */}
-
-        {/* Apply Coupon Code */}
-        <TouchableOpacity style={styles.couponContainer}>
-          <Text style={styles.couponText}>Apply Coupon Code</Text>
-          <Text style={styles.viewOffersText}>View Offers</Text>
-        </TouchableOpacity>
-
         {/* Price Breakdown */}
+        <Typography
+          style={{marginHorizontal: 16, marginTop: 24, fontWeight: '500'}}>
+          Bill Details
+        </Typography>
         <View style={styles.priceBreakdown}>
           <View style={styles.priceRow}>
             <Text style={styles.priceLabel}>Subtotal</Text>
@@ -118,147 +150,48 @@ const Cart = () => {
             <Text style={styles.priceValue}>₹5.00</Text>
           </View>
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Total</Text>
+            <Text style={styles.totalLabel}>To Pay</Text>
             <Text style={styles.totalValue}>₹251.46</Text>
           </View>
         </View>
-      </ScrollView>
-      <View>
-        <View>
-          <View style={styles.deliveryMethodContainer}>
-            <TouchableOpacity
-              style={[styles.methodButton, isDelivery && styles.selectedMethod]}
-              onPress={() => setIsDelivery(true)}>
-              <Text style={styles.methodText}>Delivery</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.methodButton,
-                !isDelivery && styles.selectedMethod,
-              ]}
-              onPress={() => setIsDelivery(false)}>
-              <Text style={styles.methodText}>Takeaway</Text>
-            </TouchableOpacity>
-          </View>
 
-          {isDelivery ? (
-            <View style={styles.deliverySlotContainer}>
-              <Text style={styles.deliverySlotText}>DELIVERY SLOT</Text>
-              <View style={styles.slotDetails}>
-                <Text style={styles.slotTime}>
-                  {formatDate(selectedDate)} {formatTime(selectedTime)}
-                </Text>
-                <TouchableOpacity onPress={() => setShowModal(true)}>
-                  <Text style={styles.changeSlot}>CHANGE</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ) : (
-            <View style={styles.deliverySlotContainer}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 10,
-                }}>
-                <LocationIcon width={30} height={30} />
-                <View style={{width: '88%'}}>
-                  <Text style={styles.deliverySlotText}>PICKUP ORDER FROM</Text>
-                  <View style={styles.slotDetails}>
-                    <Text style={styles.slotLocation}>Airoli</Text>
-                    <Text style={{color: 'black'}}>
-                      Aaloo pav, shop no 21, Lake Bloom residency, Saki Vihar
-                      Rd, Vidya milind nagar, Powai, Mumbai, Maharastra, 40072
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  width: '100%',
-                  paddingVertical: 5,
-                }}>
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 10,
-                  }}>
-                  <ClockIcon />
-                  <View style={styles.slotDetails}>
-                    <Text style={styles.deliverySlotText}>PICKUP ORDER BY</Text>
-                    <TouchableOpacity onPress={() => setShowModal(true)}>
-                      <Text style={styles.slotTime}>
-                        {formatDate(selectedDate)} {formatTime(selectedTime)}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <Text
-                  style={styles.changeSlot}
-                  onPress={() => setShowModal(true)}>
-                  CHANGE
-                </Text>
-              </View>
-            </View>
-          )}
-        </View>
-
-        {!selectedPayment ? (
-          <TouchableOpacity
-            style={styles.paymentButton}
-            onPress={() => setShowPaymentModal(true)} // Show payment modal
-          >
-            <Text style={styles.paymentButtonText}>SELECT PAYMENT MODE</Text>
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.paymentInfoContainer}>
-            <View style={styles.paymentRow}>
-              <Text style={styles.paymentLabel}>PAYMENT</Text>
-              <TouchableOpacity onPress={() => setShowPaymentModal(true)}>
-                <Text style={styles.selectedPaymentText}>
-                  {selectedPayment || 'Select Payment Mode'}
-                </Text>
+        {slotSelected && (
+          <>
+            <Typography
+              style={{marginHorizontal: 16, marginTop: 24, fontWeight: '500'}}>
+              Delivery Slot
+            </Typography>
+            <View style={styles.slotDetails}>
+              <Text style={styles.slotTime}>
+                {formatDate(selectedDate)} at {formatTime(selectedTime)}
+              </Text>
+              <TouchableOpacity onPress={() => setShowSelectSlotModal(true)}>
+                <Text style={styles.changeSlot}>CHANGE</Text>
               </TouchableOpacity>
             </View>
+          </>
+        )}
+      </ScrollView>
 
-            {/* Select Address Button */}
-            <TouchableOpacity
-              style={styles.addressButton}
-              onPress={() => setShowAddressModal(true)}>
-              <Text style={styles.addressButtonText}>SELECT ADDRESS</Text>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.deliverySlotContainer}>
+        {slotSelected ? (
+          <Button
+            title="SELECT PAYMENT MODE"
+            width={'100%'}
+            onPress={() => navigation.navigate('PaymentOptions')}
+          />
+        ) : (
+          <Button
+            title="SELECT SLOT"
+            width={'100%'}
+            onPress={() => setShowSelectSlotModal(true)}
+          />
         )}
       </View>
 
-      <ReactNativeModal
-        isVisible={isModalVisible}
-        style={{
-          justifyContent: 'flex-end',
-          margin: 0,
-        }}>
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text>Your modal content here</Text>
-
-            {/* Close button */}
-            <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-              <Text>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ReactNativeModal>
-
       {/* Modal for selecting date and time */}
       <ReactNativeModal
-        isVisible={showModal}
+        isVisible={showSelectSlotModal}
         style={{
           justifyContent: 'flex-end',
           margin: 0,
@@ -267,10 +200,7 @@ const Cart = () => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Delivery timing</Text>
             <Text style={styles.modalSubtitle}>
-              Select from available slots
-            </Text>
-            <Text style={styles.warningText}>
-              Note: Changing slot might remove items from the cart.
+              Select your preferred delivery date and time.
             </Text>
 
             <View style={styles.pickerContainer}>
@@ -308,117 +238,31 @@ const Cart = () => {
 
             <TouchableOpacity
               style={styles.confirmButton}
-              onPress={() => setShowModal(false)}>
+              onPress={() => {
+                setShowSelectSlotModal(false);
+                setSlotSelected(true);
+              }}>
               <Text style={styles.confirmButtonText}>CONFIRM SLOT</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ReactNativeModal>
 
-      <ReactNativeModal
-        isVisible={showPaymentModal}
-        style={{justifyContent: 'flex-end', alignItems: 'center', margin: 0}}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Select Payment Mode</Text>
-
-          {/* Payment Mode Options */}
-          <TouchableOpacity
-            style={styles.paymentOption}
-            onPress={() => {
-              setSelectedPayment('Cash');
-              setShowPaymentModal(false); // Close modal after selecting
-            }}>
-            <Text style={styles.paymentOptionText}>Cash</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.paymentOption}
-            onPress={() => {
-              setSelectedPayment('Online');
-              setShowPaymentModal(false); // Close modal after selecting
-            }}>
-            <Text style={styles.paymentOptionText}>Online</Text>
-          </TouchableOpacity>
-
-          {/* Close Modal Button */}
-          <TouchableOpacity
-            style={styles.confirmButton}
-            onPress={() => setShowPaymentModal(false)}>
-            <Text style={styles.confirmButtonText}>CLOSE</Text>
-          </TouchableOpacity>
-        </View>
-      </ReactNativeModal>
-
-      <AddAddressModal
+      <ViewAddressesModal
         isModalVisible={showAddressModal}
         setIsModalVisible={setShowAddressModal}
+        showAddAddressModal={showAddAddressModal}
+        setAddShowAddressModal={setAddShowAddressModal}
+      />
+      <AddAddressModal
+        isModalVisible={showAddAddressModal}
+        setIsModalVisible={setAddShowAddressModal}
       />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  paymentButton: {
-    backgroundColor: '#FF5722',
-    padding: 15,
-    borderRadius: 5,
-  },
-  paymentButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  paymentInfoContainer: {
-    backgroundColor: '#FFF',
-    paddingHorizontal: 15,
-    paddingBottom: 15,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    // marginVertical: 10,
-    borderRadius: 5,
-  },
-  addressButton: {
-    backgroundColor: '#FF5722',
-    padding: 15,
-    alignItems: 'center',
-    // marginVertical: 10,
-    marginTop: 10,
-    borderRadius: 5,
-  },
-  paymentOption: {
-    padding: 15,
-    width: '100%',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 5,
-    marginVertical: 5,
-  },
-  addressButtonText: {
-    fontSize: 16,
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
-  paymentRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  paymentLabel: {
-    fontSize: 14,
-    color: 'grey',
-  },
-  selectedPaymentText: {
-    fontSize: 16,
-    color: 'black',
-  },
-
-  paymentOptionText: {
-    fontSize: 16,
-    color: 'black',
-    textAlign: 'center',
-  },
-
   modalBackground: {
     flex: 1,
     margin: 0,
@@ -466,7 +310,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   confirmButton: {
-    backgroundColor: '#FF5722',
+    backgroundColor: '#0A9AB2',
     padding: 15,
     alignItems: 'center',
     width: '100%',
@@ -482,15 +326,22 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   header: {
-    backgroundColor: '#7CB342',
-    padding: 15,
+    backgroundColor: '#FFF',
+    padding: 10,
     color: 'black',
     textAlign: 'center',
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // marginTop: 10,
   },
   headerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'black',
     textAlign: 'center',
   },
   cartItem: {
@@ -499,6 +350,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    margin: 16,
+    borderRadius: 16,
     // marginVertical: 10,
   },
   itemDetails: {
@@ -542,8 +395,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 15,
     // marginVertical: 10,
-    borderRadius: 8,
     color: 'black',
+    marginHorizontal: 16,
+    borderRadius: 16,
   },
   rewardContainer: {
     backgroundColor: '#000',
@@ -555,26 +409,13 @@ const styles = StyleSheet.create({
   rewardText: {
     color: '#FFF',
   },
-  couponContainer: {
-    backgroundColor: '#FFF',
-    padding: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 10,
-    // marginBottom: 10,
-  },
-  couponText: {
-    color: '#FF5722',
-    fontSize: 16,
-  },
-  viewOffersText: {
-    color: '#9E9E9E',
-  },
+
   priceBreakdown: {
     backgroundColor: '#FFF',
     padding: 15,
-    // marginVertical: 10,
+    marginHorizontal: 16,
+    borderRadius: 16,
+    marginTop: 12,
   },
   priceRow: {
     flexDirection: 'row',
@@ -608,7 +449,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   linkText: {
-    color: '#FF5722',
+    color: '#0A9AB2',
     fontSize: 16,
   },
   deliveryMethodContainer: {
@@ -636,28 +477,32 @@ const styles = StyleSheet.create({
   },
   deliverySlotContainer: {
     backgroundColor: '#FFF',
-    padding: 15,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
     // marginVertical: 10,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   deliverySlotText: {
     fontSize: 14,
     color: 'black',
   },
   slotDetails: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginTop: 5,
-    backgroundColor: '#F5FAFE',
+    marginTop: 10,
+    backgroundColor: '#FFF',
     padding: 16,
     borderRadius: 12,
+    margin: 16,
   },
   slotTime: {
     fontSize: 16,
     color: 'black',
   },
   changeSlot: {
-    color: '#FF5722',
+    color: '#0A9AB2',
     fontSize: 16,
   },
 });

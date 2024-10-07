@@ -11,4 +11,5 @@ export type RootStackParamList = {
   HealthGoals: any;
   BMICaloriesPage: any;
   ReferEarn: any;
+  PaymentOptions: any;
 };
