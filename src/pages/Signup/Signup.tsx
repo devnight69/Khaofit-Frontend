@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import Typography from '../../components/Typography/Typography';
 import FlexWrapper from '../../components/FlexWrapper/FlexWrapper';
@@ -15,6 +16,10 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../RootStackParams';
 import {colors} from '../../gloabalStyles/globalStyles';
+import {postAPI} from '~/api/api';
+import {useSelector} from 'react-redux';
+import {RootState} from '~/redux/reducers/rootReducer';
+import moment from 'moment';
 
 function SignupPage() {
   const [fullName, setFullName] = useState('');
@@ -22,12 +27,17 @@ function SignupPage() {
   const [dob, setDob] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  // Function to format date in DD/MM/YYYY
+  const authSlice = useSelector((state: RootState) => state.AuthSlice);
+
   const handleDobChange = (text: string) => {
     let formattedText = text.replace(/\D/g, ''); // Remove all non-numeric characters
+
+    // Format the input as the user types in DD/MM/YYYY
     if (formattedText.length >= 3 && formattedText.length <= 4) {
       formattedText = `${formattedText.substring(
         0,
@@ -39,13 +49,48 @@ function SignupPage() {
         2,
       )}/${formattedText.substring(2, 4)}/${formattedText.substring(4, 8)}`;
     }
-    setDob(formattedText);
+
+    setDob(formattedText); // Display the formatted date as DD/MM/YYYY
+
+    // Convert to YYYY-MM-DD format if the input is complete
+    if (formattedText.length === 10) {
+      const formattedDate = moment(formattedText, 'DD/MM/YYYY').format(
+        'YYYY-MM-DD',
+      );
+      setDob(formattedDate); // Set the date in YYYY-MM-DD format
+    }
   };
 
-  const genderOptions = ['Male', 'Female', 'Other'];
+  const getAllGender = [
+    {name: 'Male', code: 'MALE'},
+    {name: 'Female', code: 'FEMALE'},
+    {name: 'Others', code: 'OTHERS'},
+  ];
+
+  console.log(fullName, dob, gender, 'hahahs');
+  const handleCreateProfile = async () => {
+    setIsLoading(true);
+    try {
+      const response: any = await postAPI('/auth/save/profile', {
+        fullName: fullName,
+        dateOfBirth: dob,
+        mobileNumber: authSlice?.mobileNumber,
+        gender: gender,
+        referredCode: '',
+        txnId: authSlice?.txnId,
+      });
+      if (response?.response) {
+        setIsLoading(false);
+        navigation.navigate('KnowAboutBMI');
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
 
   return (
-    <>
+    <ScrollView style={{backgroundColor: '#FFF'}}>
       <View style={styles.container}>
         <View style={{marginHorizontal: 20, marginTop: 20}}>
           <FlexWrapper direction="column" gap={6}>
@@ -85,6 +130,7 @@ function SignupPage() {
                     borderColor: '#ccc',
                     padding: 8,
                     fontSize: 16,
+                    color: 'black',
                   }}
                   placeholder="Enter your full name"
                   placeholderTextColor="black"
@@ -104,20 +150,20 @@ function SignupPage() {
                   fontWeight: 'normal',
                 }}>
                 <View style={styles.chipWrapper}>
-                  {genderOptions.map(option => (
+                  {getAllGender.map((option: {name: string; code: string}) => (
                     <TouchableOpacity
-                      key={option}
+                      key={option.code}
                       style={[
                         styles.chip,
-                        gender === option && styles.selectedChip,
+                        gender === option.code && styles.selectedChip,
                       ]}
-                      onPress={() => setGender(option)}>
+                      onPress={() => setGender(option.code)}>
                       <Text
                         style={[
                           styles.chipText,
-                          gender === option && styles.selectedChipText,
+                          gender === option.code && styles.selectedChipText,
                         ]}>
-                        {option}
+                        {option.name}
                       </Text>
                     </TouchableOpacity>
                   ))}
@@ -140,6 +186,7 @@ function SignupPage() {
                     borderColor: '#ccc',
                     padding: 8,
                     fontSize: 16,
+                    color: 'black',
                   }}
                   placeholder="DD/MM/YYYY"
                   placeholderTextColor="black"
@@ -171,12 +218,13 @@ function SignupPage() {
       </View>
       <View style={styles.footer}>
         <Button
+          isLoading={isLoading}
           title="Register"
           width={'100%'}
-          onPress={() => navigation.navigate('KnowAboutBMI')}
+          onPress={handleCreateProfile}
         />
       </View>
-    </>
+    </ScrollView>
   );
 }
 
@@ -205,7 +253,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: colors.secondary,
     backgroundColor: 'white',
     width: '30%',
     textAlign: 'center',

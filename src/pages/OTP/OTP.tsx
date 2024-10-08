@@ -12,13 +12,21 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../RootStackParams';
 import {colors} from '../../gloabalStyles/globalStyles';
+import {useDispatch, useSelector} from 'react-redux';
+import {setAuthSlice} from '~/redux/slices/AuthSlice';
+import {RootState} from '~/redux/reducers/rootReducer';
 
-const OtpVerification = () => {
+const OtpVerification = ({
+  submitOtpHandler,
+  resendOtpHandler,
+  phoneNumber,
+  isLoading,
+}: any) => {
   const [otp, setOtp] = useState(['', '', '', '']); // For storing the OTP digits
   const [timer, setTimer] = useState(60); // Timer duration
-
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const dispatch = useDispatch();
+  const authSlice = useSelector((state: RootState) => state.AuthSlice);
+  console.log(otp, 'otp');
 
   // Refs to control the focus of each TextInput
   const otpRefs = [
@@ -33,6 +41,8 @@ const OtpVerification = () => {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+
+    dispatch(setAuthSlice({...authSlice, otpValue: newOtp.join('')}));
 
     if (value !== '' && index < otpRefs.length - 1) {
       otpRefs[index + 1]?.current?.focus(); // Move to the next input
@@ -64,15 +74,13 @@ const OtpVerification = () => {
     <>
       <View style={styles.container}>
         <Text style={styles.subHeader}>Mobile Verification</Text>
-        <Text style={styles.instructions}>
-          Enter the verification code sent on your mobile number, +91 98611*****
-        </Text>
+        <Text style={styles.instructions}>{phoneNumber}</Text>
 
         <View style={styles.otpContainer}>
           {otp.map((digit, index) => (
             <TextInput
               key={index}
-              ref={otpRefs[index]} // Attach the ref to each TextInput
+              ref={otpRefs[index]}
               style={styles.otpInput}
               keyboardType="numeric"
               maxLength={1}
@@ -89,7 +97,7 @@ const OtpVerification = () => {
 
         <View style={styles.resendContainer}>
           <Text style={styles.resendText}>Didn’t receive code?</Text>
-          <TouchableOpacity onPress={handleResendOtp}>
+          <TouchableOpacity onPress={resendOtpHandler}>
             <Text style={styles.resendLink}>Resend</Text>
           </TouchableOpacity>
         </View>
@@ -103,8 +111,9 @@ const OtpVerification = () => {
 
       <View style={styles.footer}>
         <Button
+          isLoading={isLoading}
           title="Continue"
-          onPress={() => navigation.navigate('signupPage')}
+          onPress={submitOtpHandler}
           width={'100%'}
         />
       </View>

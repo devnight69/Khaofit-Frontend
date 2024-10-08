@@ -7,6 +7,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {colors} from '../../gloabalStyles/globalStyles';
+import Loader from '../Loader/Loader';
 
 interface ButtonProps {
   title: string;
@@ -17,6 +18,7 @@ interface ButtonProps {
   width?: number | any; // Optional width prop
   borderRadius?: number; // Optional border radius prop
   fontSize?: number; // Optional font size prop
+  isLoading?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -28,6 +30,7 @@ const Button: React.FC<ButtonProps> = ({
   width = 200, // Default width
   borderRadius = 25, // Default border radius
   fontSize = 16, // Default font size
+  isLoading,
 }) => {
   return (
     <TouchableOpacity
@@ -36,9 +39,13 @@ const Button: React.FC<ButtonProps> = ({
         styles.button,
         {backgroundColor: bgColor, height, width, borderRadius},
       ]}>
-      <Text style={[styles.buttonText, {color: textColor, fontSize}]}>
-        {title}
-      </Text>
+      {isLoading ? (
+        <Loader visible color="#FFF" />
+      ) : (
+        <Text style={[styles.buttonText, {color: textColor, fontSize}]}>
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

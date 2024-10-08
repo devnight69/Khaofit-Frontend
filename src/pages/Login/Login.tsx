@@ -15,18 +15,44 @@ import {colors} from '~/gloabalStyles/globalStyles';
 import DeliveryGuyAnimation from '~/utils/LottieAnimation/DeliveryGuy.json';
 import LottieView from 'lottie-react-native';
 import {RootStackParamList} from 'RootStackParams';
+import {postAPI} from '~/api/api';
+import Loader from '~/components/Loader/Loader';
+import {useDispatch, useSelector} from 'react-redux';
+import {setAuthSlice} from '~/redux/slices/AuthSlice';
+import {RootState} from '~/redux/reducers/rootReducer';
 
 const LoginPage = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleContinue = () => {
-    // Handle continue logic here, e.g., verify phone number, navigate to OTP screen, etc.
-    console.log('Phone number entered: +91', phoneNumber);
-    navigation.navigate('otpPage');
-  };
-
+  const authSlice = useSelector((state: RootState) => state.AuthSlice);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const dispatch = useDispatch();
+
+  const handleSendOtp = async () => {
+    setIsLoading(true);
+    try {
+      const response: any = await postAPI('/auth/send-otp', {
+        mobileNumber: phoneNumber,
+      });
+      if (response?.response) {
+        setIsLoading(false);
+        navigation.navigate('LoginOtp');
+        dispatch(
+          setAuthSlice({
+            ...authSlice,
+            txnId: response?.data?.txnId,
+            mobileNumber: phoneNumber,
+          }),
+        );
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -70,17 +96,14 @@ const LoginPage = () => {
             styles.continueButton,
             {backgroundColor: phoneNumber ? '#00AEEF' : '#B0E0FF'},
           ]}
-          onPress={handleContinue}
+          onPress={handleSendOtp}
           disabled={!phoneNumber}>
-          <Text style={styles.continueButtonText}>Continue</Text>
+          {isLoading ? (
+            <Loader visible={true} color="#FFF" size="large" />
+          ) : (
+            <Text style={styles.continueButtonText}>Continue</Text>
+          )}
         </TouchableOpacity>
-
-        {/* <TouchableOpacity style={styles.signupContainer}>
-          <Text style={styles.signupText}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('signupPage')}>
-            <Text style={styles.signupLink}> Sign up</Text>
-          </TouchableOpacity>
-        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );

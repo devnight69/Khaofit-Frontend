@@ -12,6 +12,7 @@ import OtpVerification from './src/pages/OTP/OTP';
 import ReferEarn from './src/pages/ReferEarn/ReferEarn';
 import SignupPage from './src/pages/Signup/Signup';
 import PaymentOptions from '~/pages/Payment/PaymentOptions';
+import LoginOtp from '~/pages/Login/LoginOtp';
 
 export const AppRoutes = [
   {
@@ -19,6 +20,23 @@ export const AppRoutes = [
     component: LoginPage,
     options: {headerShown: false},
     headerTintColor: '#FFF',
+  },
+  {
+    name: 'LoginOtp',
+    component: LoginOtp,
+    options: {
+      headerTintColor: '#FFF',
+      title: '',
+      headerStyle: {
+        backgroundColor: '#10C0DF',
+      },
+      headerTitleStyle: {
+        fontSize: 16,
+        fontWeight: '100',
+        color: '#FFF',
+      },
+      headerTitleAlign: 'center',
+    },
   },
   {
     name: 'homepage',

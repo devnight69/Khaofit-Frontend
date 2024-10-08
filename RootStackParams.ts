@@ -12,4 +12,5 @@ export type RootStackParamList = {
   BMICaloriesPage: any;
   ReferEarn: any;
   PaymentOptions: any;
+  LoginOtp: any;
 };

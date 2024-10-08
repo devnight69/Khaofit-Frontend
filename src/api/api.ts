@@ -1,7 +1,7 @@
 import axios, {AxiosRequestConfig} from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9002/ambula',
+  baseURL: 'https://khaofit-backend.onrender.com/khaofit',
 });
 
 // Function to make a GET request with optional params and headers
