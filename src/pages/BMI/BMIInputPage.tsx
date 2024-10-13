@@ -5,69 +5,159 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../RootStackParams';
+import Label from '~/components/InputLabel/InputLabel';
+import {colors} from '~/gloabalStyles/globalStyles';
+import {postAPI} from '~/api/api';
+import {useSelector} from 'react-redux';
+import {RootState} from '~/redux/reducers/rootReducer';
+
 const BMIInputPage = () => {
   const [age, setAge] = useState('');
   const [weight, setWeight] = useState('');
   const [heightFt, setHeightFt] = useState('');
   const [heightCm, setHeightCm] = useState('');
+  const [gender, setGender] = useState('');
+  const [bmiDetails, setBmiDetails] = useState({});
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const authSlice = useSelector((state: RootState) => state.AuthSlice);
+
+  const handleCalulateBmi = async () => {
+    try {
+      const response: any = await postAPI(
+        `/bmi/calculate?mobileNumber=${authSlice?.mobileNumber}`,
+      );
+      if (response?.response) {
+        setBmiDetails(response?.data);
+        navigation.navigate('BMIResultPage', {bmi: bmiDetails});
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllGender = [
+    {name: 'Male', code: 'MALE'},
+    {name: 'Female', code: 'FEMALE'},
+    {name: 'Others', code: 'OTHERS'},
+  ];
+
   return (
     <>
       <View style={styles.container}>
-        {/* Text Content */}
         <Text style={styles.headingBold}>Enter Your Details</Text>
 
-        {/* Input Fields */}
         <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Age"
-            keyboardType="numeric"
-            value={age}
-            onChangeText={setAge}
-            placeholderTextColor="#9C9C9C"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Weight (kg)"
-            keyboardType="numeric"
-            value={weight}
-            onChangeText={setWeight}
-            placeholderTextColor="#9C9C9C"
-          />
-          <View style={styles.heightContainer}>
+          {/* Age Field */}
+          <Label
+            label="Age"
+            labelStyle={{
+              fontSize: 16,
+              color: 'white',
+              fontWeight: 'normal',
+              marginBottom: 5,
+            }}>
             <TextInput
-              style={[styles.input, styles.inputHalf]}
-              placeholder="Height (ft)"
+              style={styles.input}
+              placeholder="Enter your age"
               keyboardType="numeric"
-              value={heightFt}
-              onChangeText={setHeightFt}
+              value={age}
+              onChangeText={setAge}
               placeholderTextColor="#9C9C9C"
             />
+          </Label>
+
+          {/* Weight Field */}
+          <Label
+            label="Weight (kg)"
+            labelStyle={{
+              fontSize: 16,
+              color: 'white',
+              fontWeight: 'normal',
+              marginBottom: 5,
+            }}>
             <TextInput
-              style={[styles.input, styles.inputHalf]}
-              placeholder="Height (Inches)"
+              style={styles.input}
+              placeholder="Enter your weight"
               keyboardType="numeric"
-              value={heightCm}
-              onChangeText={setHeightCm}
+              value={weight}
+              onChangeText={setWeight}
               placeholderTextColor="#9C9C9C"
             />
-          </View>
+          </Label>
+
+          {/* Height Fields */}
+          <Label
+            label="Height"
+            labelStyle={{
+              fontSize: 16,
+              color: 'white',
+              fontWeight: 'normal',
+              marginBottom: 5,
+            }}>
+            <View style={styles.heightContainer}>
+              <TextInput
+                style={[styles.input, styles.inputHalf]}
+                placeholder="Feet"
+                keyboardType="numeric"
+                value={heightFt}
+                onChangeText={setHeightFt}
+                placeholderTextColor="#9C9C9C"
+              />
+              <TextInput
+                style={[styles.input, styles.inputHalf]}
+                placeholder="Inches"
+                keyboardType="numeric"
+                value={heightCm}
+                onChangeText={setHeightCm}
+                placeholderTextColor="#9C9C9C"
+              />
+            </View>
+          </Label>
+
+          {/* Gender Field */}
+          <Label
+            label="Gender"
+            labelStyle={{
+              fontSize: 16,
+              color: 'white',
+              fontWeight: 'normal',
+              marginBottom: 5,
+            }}>
+            <View style={styles.chipWrapper}>
+              {getAllGender.map(option => (
+                <TouchableOpacity
+                  key={option.code}
+                  style={[
+                    styles.chip,
+                    gender === option.code && styles.selectedChip,
+                  ]}
+                  onPress={() => setGender(option.code)}>
+                  <Text
+                    style={[
+                      styles.chipText,
+                      gender === option.code && styles.selectedChipText,
+                    ]}>
+                    {option.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </Label>
         </View>
       </View>
+
       <View style={styles.footer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('BMIResultPage')}>
+        <TouchableOpacity style={styles.button} onPress={handleCalulateBmi}>
           <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
       </View>
@@ -76,37 +166,40 @@ const BMIInputPage = () => {
 };
 
 const styles = StyleSheet.create({
+  chipWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  chip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.secondary,
+    backgroundColor: 'white',
+    width: '30%',
+    textAlign: 'center',
+  },
+  selectedChip: {
+    backgroundColor: colors.secondary,
+  },
+  chipText: {
+    fontSize: 16,
+    color: 'black',
+    textAlign: 'center',
+  },
+  selectedChipText: {
+    color: 'black',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#00AEEF', // Gradient background color
+    backgroundColor: '#00AEEF',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
   },
-  imageTop: {
-    marginBottom: 20,
-    position: 'absolute',
-    top: 30,
-    left: 30,
-  },
-  imageBottom: {
-    marginTop: 30,
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
-  },
-  image: {
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
-  },
-  imageLarge: {
-    width: 140,
-    height: 140,
-    resizeMode: 'contain',
-  },
   headingBold: {
-    fontSize: 30, // Consistent large heading
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#FFFFFF',
     textAlign: 'center',
@@ -114,7 +207,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
-    // paddingHorizontal: 30,
   },
   input: {
     backgroundColor: '#FFFFFF',
@@ -123,18 +215,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontSize: 16,
     color: '#333',
-    marginBottom: 16,
+    marginBottom: 10,
   },
   heightContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   inputHalf: {
-    width: '48%', // Half width for height inputs
-  },
-  buttonContainer: {
-    width: '80%', // Same width as the previous page for buttons
-    marginTop: 20,
+    width: '48%',
   },
   footer: {
     flexDirection: 'row',
@@ -148,14 +236,13 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12, // Consistent rounded corners
-    paddingVertical: 14, // Increased padding for more clickable area
-    // marginHorizontal: 10,
+    borderRadius: 12,
+    paddingVertical: 14,
     alignItems: 'center',
-    elevation: 3, // Added elevation for better button visibility
+    elevation: 3,
   },
   buttonText: {
-    fontSize: 18, // Larger button text for better readability
+    fontSize: 18,
     color: '#00AEEF',
     fontWeight: 'bold',
   },

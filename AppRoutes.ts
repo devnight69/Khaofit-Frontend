@@ -13,6 +13,8 @@ import ReferEarn from './src/pages/ReferEarn/ReferEarn';
 import SignupPage from './src/pages/Signup/Signup';
 import PaymentOptions from '~/pages/Payment/PaymentOptions';
 import LoginOtp from '~/pages/Login/LoginOtp';
+import PlaceOrder from '~/pages/PlaceOrder/PlaceOrder';
+import Profile from '~/pages/Profile/Profile';
 
 export const AppRoutes = [
   {
@@ -217,6 +219,40 @@ export const AppRoutes = [
   {
     name: 'PaymentOptions',
     component: PaymentOptions,
+    options: {
+      headerTintColor: '#FFF',
+      title: '',
+      headerStyle: {
+        backgroundColor: '#10C0DF',
+      },
+      headerTitleStyle: {
+        fontSize: 16,
+        fontWeight: '100',
+        color: '#FFF',
+      },
+      headerTitleAlign: 'center',
+    },
+  },
+  {
+    name: 'PlaceOrder',
+    component: PlaceOrder,
+    options: {
+      headerTintColor: '#FFF',
+      title: '',
+      headerStyle: {
+        backgroundColor: '#10C0DF',
+      },
+      headerTitleStyle: {
+        fontSize: 16,
+        fontWeight: '100',
+        color: '#FFF',
+      },
+      headerTitleAlign: 'center',
+    },
+  },
+  {
+    name: 'Profile',
+    component: Profile,
     options: {
       headerTintColor: '#FFF',
       title: '',

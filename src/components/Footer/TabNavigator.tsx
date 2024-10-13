@@ -4,6 +4,7 @@ import Homepage from '~/pages/Homepage/Homepage';
 import ReferEarn from '~/pages/ReferEarn/ReferEarn';
 import SignupPage from '~/pages/Signup/Signup';
 import Footer from './Footer';
+import Profile from '~/pages/Profile/Profile';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -18,7 +19,7 @@ const TabNavigator = () => {
     },
     {
       name: 'Profile',
-      component: SignupPage,
+      component: Profile,
     },
   ];
   return (

@@ -72,13 +72,17 @@ function SignupPage() {
     setIsLoading(true);
     try {
       const response: any = await postAPI('/auth/save/profile', {
-        fullName: fullName,
-        dateOfBirth: dob,
+        firstName: 'Kousik',
+        middleName: '',
+        lastName: 'Manik',
+        dateOfBirth: '1980-01-01',
         mobileNumber: authSlice?.mobileNumber,
-        gender: gender,
+        emailId: 'kousik@gmail.com',
+        gender: 'MALE',
         referredCode: '',
         txnId: authSlice?.txnId,
       });
+
       if (response?.response) {
         setIsLoading(false);
         navigation.navigate('KnowAboutBMI');
